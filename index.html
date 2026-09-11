@@ -60,8 +60,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .head h1{font-size:26px;font-weight:500;letter-spacing:-.015em;line-height:1.15}
 .head p{font-size:13px;font-weight:300;color:var(--soft);margin-top:5px}
 
-.tiers{display:flex;flex-direction:column;gap:9px;flex:none}
-.tiers-fill{justify-content:center;flex:1}
+.tiers{display:flex;flex-direction:column;gap:9px;flex:1;justify-content:center}
 .tier{
   display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;
   padding:15px 16px;text-align:left;
@@ -100,8 +99,8 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .top-h{font-size:15px;font-weight:500;line-height:1.3}
 .top-s{font-size:11.5px;font-weight:300;color:var(--soft)}
 
-.pick-body{padding:15px}
-.pick-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.pick-body{padding:15px;flex:1;min-height:0;display:flex;flex-direction:column}
+.pick-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;flex:none}
 .pick-head h2{font-size:13.5px;font-weight:400;color:var(--soft)}
 .pager{display:flex;align-items:center;gap:2px}
 .pager button{
@@ -112,7 +111,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .pager button:disabled{color:var(--hair);cursor:default}
 .pager span{font-size:12.5px;color:var(--soft);min-width:34px;text-align:center}
 
-#nums{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+#nums{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;flex:1;align-content:center}
 .num{
   aspect-ratio:1;border-radius:10px;
   background:var(--tint);border:1px solid transparent;
@@ -125,7 +124,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .num small{font-size:9px;font-weight:400;color:var(--blue);font-family:'IBM Plex Mono',monospace}
 .num.done{background:var(--white);border-color:var(--blue);color:var(--blue)}
 
-.acts{display:flex;gap:8px;margin-top:14px}
+.acts{display:flex;gap:8px;margin-top:14px;flex:none}
 .btn{
   flex:1;padding:12px;border-radius:11px;font-size:14px;font-weight:400;
   background:var(--blue);color:#fff;
@@ -174,17 +173,19 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .notes b{display:grid;place-items:center;font-weight:400}
 
 /* ─────────── แผงตัวเลข ─────────── */
-#pad{display:grid;grid-template-columns:repeat(9,1fr);gap:5px;flex:none}
+#pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;flex:none}
 #tools{flex:none}
 .key{
-  background:var(--white);border:1px solid var(--edge);border-radius:11px;
-  height:clamp(52px, 10.2dvh, 96px);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  position:relative;
+  background:var(--white);border:1px solid var(--edge);border-radius:12px;
+  height:clamp(56px, 8.6dvh, 86px);
+  display:grid;place-items:center;
 }
 .key:hover{border-color:var(--rule)}
 .key:active{transform:scale(.93)}
-.key b{font-family:'IBM Plex Mono',monospace;font-size:clamp(19px,4dvh,28px);font-weight:500;line-height:1;color:var(--blue)}
-.key i{font-style:normal;font-size:9px;color:var(--soft);font-family:'IBM Plex Mono',monospace}
+.key b{font-family:'IBM Plex Mono',monospace;font-size:clamp(24px,4.2dvh,34px);font-weight:500;line-height:1;color:var(--blue)}
+.key i{position:absolute;right:10px;bottom:7px;font-style:normal;font-size:11px;
+  color:var(--soft);font-family:'IBM Plex Mono',monospace}
 .key.spent{background:var(--bg);border-color:transparent}
 .key.spent b{color:var(--hair)}
 .key.spent i{visibility:hidden}
@@ -192,7 +193,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 #tools{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
 .tool{
   background:var(--white);border:1px solid var(--edge);border-radius:11px;
-  height:clamp(48px, 8.4dvh, 78px);
+  height:clamp(48px, 6.6dvh, 64px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   font-size:11px;font-weight:300;color:var(--soft);
 }
