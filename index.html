@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ซูโดกุ 1000 แบบฝึก</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f2f7fc">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ซูโดกุ">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2f7fc;          /* ฟ้าอ่อนจางที่สุด ใช้เป็นพื้นหลัง */
+  --white:#ffffff;
+  --ink:#16212f;         /* น้ำเงินเข้มเกือบดำ ใช้แทนสีดำ */
+  --soft:#78899d;
+  --hair:#d3e2ef;        /* เส้นแบ่งช่องย่อย */
+  --rule:#7ba3c8;        /* เส้นแบ่งบล็อก 3×3 */
+  --edge:#e2ecf6;        /* ขอบการ์ด */
+  --tint:#eaf3fb;        /* ฟ้าอ่อนสำหรับพื้นปุ่ม */
+  --peer:#f0f7fd;        /* แถว/หลัก/บล็อกเดียวกับช่องที่เลือก */
+  --twin:#d7e9f8;        /* ช่องที่มีเลขเดียวกัน */
+  --sel:#b9dcf7;         /* ช่องที่เลือกอยู่ */
+  --blue:#2e7fc4;        /* เลขที่ผู้เล่นกรอก + สีเน้น */
+  --bad:#c9556c;
+  --bad-bg:#fbeaed;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{height:100%;overscroll-behavior:none}
+body{
+  height:100dvh; overflow:hidden;            /* สูงเท่าจอพอดี ไม่มีการเลื่อน */
+  overscroll-behavior:none;                 /* กันดึงหน้าจอลงแล้วรีเฟรช */
+  touch-action:manipulation;                /* กันแตะสองครั้งแล้วซูม */
+  -webkit-user-select:none; user-select:none;
+  -webkit-touch-callout:none;               /* กันกดค้างแล้วเด้งเมนู */
+  background:var(--bg); color:var(--ink);
+  font-family:'IBM Plex Sans Thai',-apple-system,'Segoe UI',sans-serif;
+  font-weight:400; display:flex; justify-content:center;
+  padding:10px 10px calc(8px + env(safe-area-inset-bottom));
+  overflow-x:hidden;
+}
+#app{width:100%;max-width:460px;height:100%;display:flex;flex-direction:column}
+#app > section{flex:1;min-height:0;display:flex;flex-direction:column;gap:12px}
+#vHome,#vPick{overflow-y:auto;-webkit-overflow-scrolling:touch}
+button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
+.hide{display:none !important}
+.mono{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+.card{background:var(--white);border:1px solid var(--edge);border-radius:14px}
+
+/* ─────────── หน้าแรก ─────────── */
+.head{padding:14px 2px 4px;flex:none}
+.head h1{font-size:26px;font-weight:500;letter-spacing:-.015em;line-height:1.15}
+.head p{font-size:13px;font-weight:300;color:var(--soft);margin-top:5px}
+
+.tiers{display:flex;flex-direction:column;gap:9px;flex:none}
+.tiers-fill{justify-content:center;flex:1}
+.tier{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;
+  padding:15px 16px;text-align:left;
+  background:var(--white);border:1px solid var(--edge);border-radius:14px;
+  transition:border-color .12s ease, transform .12s ease;
+}
+.tier:not(.locked):hover{border-color:var(--rule)}
+.tier:not(.locked):active{transform:scale(.99)}
+.tier.locked{background:transparent;border-style:dashed;cursor:default}
+.tier.locked .tier-name,.tier.locked .tier-sub{color:var(--soft)}
+.steps{display:flex;align-items:flex-end;gap:3px;height:20px}
+.step{width:4px;border-radius:1px;background:var(--hair)}
+.step.on{background:var(--blue)}
+.tier.locked .step.on{background:var(--hair)}
+.tier-name{font-size:16px;font-weight:500;display:block;line-height:1.35}
+.tier-sub{font-size:12.5px;font-weight:300;color:var(--soft);display:block;margin-top:1px}
+.tier-right{text-align:right;font-size:12px;color:var(--soft);line-height:1.5;flex:none}
+.tier-right b{display:block;font-size:17px;font-weight:500;color:var(--ink);font-family:'IBM Plex Mono',monospace}
+.lockmark{font-size:15px;color:var(--soft)}
+.wipe{
+  align-self:center;flex:none;margin-top:-4px;padding:8px 14px;
+  font-size:11.5px;font-weight:300;color:var(--soft);border-radius:9px;
+}
+.wipe:hover{background:var(--tint);color:var(--bad)}
+.note{font-size:12px;font-weight:300;color:var(--soft);text-align:center;line-height:1.8;padding:2px 8px}
+
+/* ─────────── เลือกข้อ ─────────── */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.topleft{display:flex;align-items:center;gap:11px;min-width:0}
+.back{
+  width:34px;height:34px;border-radius:10px;flex:none;
+  background:var(--white);border:1px solid var(--edge);
+  display:grid;place-items:center;font-size:17px;color:var(--soft);
+}
+.back:active{transform:scale(.94)}
+.top-h{font-size:15px;font-weight:500;line-height:1.3}
+.top-s{font-size:11.5px;font-weight:300;color:var(--soft)}
+
+.pick-body{padding:15px}
+.pick-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.pick-head h2{font-size:13.5px;font-weight:400;color:var(--soft)}
+.pager{display:flex;align-items:center;gap:2px}
+.pager button{
+  width:27px;height:27px;border-radius:8px;display:grid;place-items:center;
+  color:var(--blue);font-size:15px;
+}
+.pager button:hover:not(:disabled){background:var(--tint)}
+.pager button:disabled{color:var(--hair);cursor:default}
+.pager span{font-size:12.5px;color:var(--soft);min-width:34px;text-align:center}
+
+#nums{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.num{
+  aspect-ratio:1;border-radius:10px;
+  background:var(--tint);border:1px solid transparent;
+  font-family:'IBM Plex Mono',monospace;font-size:14px;font-variant-numeric:tabular-nums;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  transition:border-color .12s ease;
+}
+.num:hover{border-color:var(--rule)}
+.num:active{transform:scale(.94)}
+.num small{font-size:9px;font-weight:400;color:var(--blue);font-family:'IBM Plex Mono',monospace}
+.num.done{background:var(--white);border-color:var(--blue);color:var(--blue)}
+
+.acts{display:flex;gap:8px;margin-top:14px}
+.btn{
+  flex:1;padding:12px;border-radius:11px;font-size:14px;font-weight:400;
+  background:var(--blue);color:#fff;
+}
+.btn.alt{background:var(--tint);color:var(--ink)}
+.btn:active{transform:scale(.98)}
+
+/* ─────────── กระดาน ─────────── */
+.clock{display:flex;align-items:center;gap:8px;flex:none}
+#time{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+#pauseB{width:34px;height:34px;border-radius:10px;background:var(--white);border:1px solid var(--edge);display:grid;place-items:center;font-size:11px;color:var(--soft)}
+
+#boardWrap{
+  flex:1; min-height:0;                     /* กินพื้นที่ที่เหลือทั้งหมด */
+  display:grid; place-items:center;         /* กระดานอยู่กึ่งกลางแนวตั้ง */
+}
+#board{
+  display:grid;grid-template-columns:repeat(9,1fr);aspect-ratio:1;
+  border:2px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--white);
+}
+.cell{
+  position:relative;display:grid;place-items:center;cursor:pointer;
+  font-family:'IBM Plex Mono',monospace;font-size:calc(var(--cell,34px) * .56);
+  font-variant-numeric:tabular-nums;line-height:1;color:var(--ink);
+  border-right:1px solid var(--hair);
+  border-bottom:1px solid var(--hair);
+  transition:background-color .08s linear;
+}
+.cell.c8{border-right:0}
+.cell.r8{border-bottom:0}
+.cell.c2,.cell.c5{border-right:2px solid var(--rule)}
+.cell.r2,.cell.r5{border-bottom:2px solid var(--rule)}
+.cell.peer{background:var(--peer)}
+.cell.twin{background:var(--twin)}
+.cell.sel{background:var(--sel)}
+.cell.given{font-weight:500}
+.cell.user{color:var(--blue)}
+.cell.bad{color:var(--bad);background:var(--bad-bg)}
+.cell.flash{animation:pop .3s ease}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.15)}100%{transform:scale(1)}}
+.notes{
+  position:absolute;inset:1px;display:grid;
+  grid-template:repeat(3,1fr)/repeat(3,1fr);
+  font-size:calc(var(--cell,34px) * .27);color:var(--soft);
+}
+.notes b{display:grid;place-items:center;font-weight:400}
+
+/* ─────────── แผงตัวเลข ─────────── */
+#pad{display:grid;grid-template-columns:repeat(9,1fr);gap:5px;flex:none}
+#tools{flex:none}
+.key{
+  background:var(--white);border:1px solid var(--edge);border-radius:11px;
+  height:clamp(52px, 10.2dvh, 96px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+}
+.key:hover{border-color:var(--rule)}
+.key:active{transform:scale(.93)}
+.key b{font-family:'IBM Plex Mono',monospace;font-size:clamp(19px,4dvh,28px);font-weight:500;line-height:1;color:var(--blue)}
+.key i{font-style:normal;font-size:9px;color:var(--soft);font-family:'IBM Plex Mono',monospace}
+.key.spent{background:var(--bg);border-color:transparent}
+.key.spent b{color:var(--hair)}
+.key.spent i{visibility:hidden}
+
+#tools{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.tool{
+  background:var(--white);border:1px solid var(--edge);border-radius:11px;
+  height:clamp(48px, 8.4dvh, 78px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  font-size:11px;font-weight:300;color:var(--soft);
+}
+.tool svg{width:18px;height:18px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tool:active{transform:scale(.95)}
+.tool.on{background:var(--blue);border-color:var(--blue)}
+.tool.on svg{stroke:#fff}
+.tool.on span{color:#fff}
+
+/* ─────────── เลเยอร์ทับ ─────────── */
+.veil{
+  position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px;padding:28px;text-align:center;
+  background:rgba(242,247,252,.93);backdrop-filter:blur(8px);
+}
+.veil h2{font-size:22px;font-weight:500}
+.veil p{font-size:13.5px;font-weight:300;color:var(--soft);max-width:31ch;line-height:1.8}
+.bigtime{font-family:'IBM Plex Mono',monospace;font-size:46px;font-weight:500;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.tagline{font-size:13px;color:var(--blue)}
+.veil .acts{width:100%;max-width:290px;margin-top:2px}
+.spin{width:30px;height:30px;border:2px solid var(--hair);border-top-color:var(--blue);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══ หน้าแรก ═══ -->
+  <section id="vHome">
+    <div class="head">
+      <h1>ซูโดกุ</h1>
+      <p>1000 แบบฝึก · ห้าระดับ · ปลดล็อกไปทีละขั้น</p>
+    </div>
+    <div class="tiers" id="tiers"></div>
+    <p class="note" id="homeNote"></p>
+    <button class="wipe" id="bWipe">ล้างสถิติทั้งหมด</button>
+  </section>
+
+  <!-- ═══ เลือกข้อ ═══ -->
+  <section id="vPick" class="hide">
+    <div class="topbar">
+      <div class="topleft">
+        <button class="back" id="pickBack" aria-label="ย้อนกลับ">‹</button>
+        <div>
+          <div class="top-h" id="pickName">ปานกลาง</div>
+          <div class="top-s" id="pickSub">ผ่านแล้ว 0 จาก 200 ข้อ</div>
+        </div>
+      </div>
+    </div>
+    <div class="card pick-body">
+      <div class="pick-head">
+        <h2 id="rangeLbl">ข้อ 1–25</h2>
+        <div class="pager">
+          <button id="pgPrev" aria-label="หน้าก่อนหน้า">‹</button>
+          <span id="pgLbl" class="mono">1 / 8</span>
+          <button id="pgNext" aria-label="หน้าถัดไป">›</button>
+        </div>
+      </div>
+      <div id="nums"></div>
+      <div class="acts">
+        <button class="btn" id="bContinue">เล่นข้อถัดไป</button>
+        <button class="btn alt" id="bRandom">สุ่ม</button>
+      </div>
+    </div>
+    <p class="note" id="pickNote"></p>
+  </section>
+
+  <!-- ═══ เกม ═══ -->
+  <section id="vGame" class="hide">
+    <div class="topbar">
+      <div class="topleft">
+        <button class="back" id="gameBack" aria-label="ย้อนกลับ">‹</button>
+        <div>
+          <div class="top-h" id="gName">ปานกลาง · ข้อ 1</div>
+          <div class="top-s" id="gSub">ตัวเลขเริ่มต้น 26 ช่อง</div>
+        </div>
+      </div>
+      <div class="clock">
+        <div id="time" class="mono">0:00</div>
+        <button id="pauseB" aria-label="พักเกม">❚❚</button>
+      </div>
+    </div>
+    <div id="boardWrap"><div id="board"></div></div>
+    <div id="pad"></div>
+    <div id="tools">
+      <button class="tool" id="tUndo">
+        <svg viewBox="0 0 24 24"><path d="M4 10h10a5 5 0 0 1 0 10H9"/><path d="M8 6l-4 4 4 4"/></svg>
+        <span>ย้อนกลับ</span></button>
+      <button class="tool" id="tErase">
+        <svg viewBox="0 0 24 24"><path d="M8 20H5l-2-3 9-11 6 5-8 9z"/><path d="M13 20h7"/></svg>
+        <span>ลบ</span></button>
+      <button class="tool" id="tNote">
+        <svg viewBox="0 0 24 24"><path d="M4 18l1-4L16 3l5 5L10 19l-4 1z"/><path d="M14 5l5 5"/></svg>
+        <span>จดเลข</span></button>
+      <button class="tool" id="tHint">
+        <svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5V15h8v-1.5A6 6 0 0 0 12 3z"/></svg>
+        <span id="hintN">ใบ้ 0</span></button>
+    </div>
+  </section>
+</div>
+
+<div class="veil hide" id="vLoad"><div class="spin"></div><p id="loadMsg">กำลังสร้างโจทย์</p></div>
+
+<div class="veil hide" id="vPause">
+  <h2>พักไว้ก่อน</h2>
+  <div class="bigtime" id="pTime">0:00</div>
+  <p>นาฬิกาหยุดแล้ว กระดานถูกซ่อนไว้กันแอบคิดต่อ</p>
+  <div class="acts">
+    <button class="btn" id="bResume">เล่นต่อ</button>
+    <button class="btn alt" id="bQuit">ออก</button>
+  </div>
+</div>
+
+<div class="veil hide" id="vWin">
+  <h2 id="wHead">เสร็จแล้ว</h2>
+  <div class="bigtime" id="wTime">0:00</div>
+  <p id="wStats"></p>
+  <div class="tagline hide" id="wTag"></div>
+  <div class="acts">
+    <button class="btn" id="bNextP">ข้อถัดไป</button>
+    <button class="btn alt" id="bBackList">เลือกข้อ</button>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+
+/* ==================================================================
+   1. เครื่องสุ่มแบบมี seed — ข้อเดิมต้องได้โจทย์เดิมเสมอ
+   ================================================================== */
+function mulberry(seed){
+  let a = seed >>> 0;
+  return function(){
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function shuffle(arr, rand){
+  for(let i = arr.length - 1; i > 0; i--){
+    const j = (rand() * (i + 1)) | 0;
+    const t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+  }
+  return arr;
+}
+
+/* ==================================================================
+   2. โครงสร้างหน่วย (แถว / หลัก / บล็อก) เตรียมไว้ล่วงหน้า
+   ================================================================== */
+const ROW = [], COL = [], BOX = [], UNITS = [], PEERS = [];
+for(let i = 0; i < 9; i++){ ROW.push([]); COL.push([]); BOX.push([]); }
+for(let i = 0; i < 81; i++){
+  const r = (i / 9) | 0, c = i % 9, b = ((r / 3) | 0) * 3 + ((c / 3) | 0);
+  ROW[r].push(i); COL[c].push(i); BOX[b].push(i);
+}
+UNITS.push(...ROW, ...COL, ...BOX);
+for(let i = 0; i < 81; i++){
+  const r = (i / 9) | 0, c = i % 9, b = ((r / 3) | 0) * 3 + ((c / 3) | 0);
+  const s = new Set([...ROW[r], ...COL[c], ...BOX[b]]);
+  s.delete(i);
+  PEERS.push([...s]);
+}
+const BIT = [0, 1, 2, 4, 8, 16, 32, 64, 128, 256];
+const popcount = m => { let n = 0; while(m){ m &= m - 1; n++; } return n; };
+const lowbit = m => Math.log2(m & -m) + 1;
+
+/* ==================================================================
+   3. ตัวช่วยพื้นฐาน
+   ================================================================== */
+function allows(g, i, v){
+  for(const p of PEERS[i]) if(g[p] === v) return false;
+  return true;
+}
+function fullGrid(rand){
+  const g = new Uint8Array(81);
+  (function fill(i){
+    if(i === 81) return true;
+    for(const v of shuffle([1,2,3,4,5,6,7,8,9], rand)){
+      if(allows(g, i, v)){
+        g[i] = v;
+        if(fill(i + 1)) return true;
+        g[i] = 0;
+      }
+    }
+    return false;
+  })(0);
+  return g;
+}
+/* นับจำนวนคำตอบ หยุดเมื่อถึง limit (ใช้เช็คว่าโจทย์มีคำตอบเดียว) */
+function countSolutions(src, limit){
+  const g = Uint8Array.from(src);
+  let found = 0;
+  (function go(){
+    let cell = -1, best = 10, bestMask = 0;
+    for(let i = 0; i < 81; i++){
+      if(g[i]) continue;
+      let mask = 0x1FF;
+      for(const p of PEERS[i]) if(g[p]) mask &= ~BIT[g[p]];
+      const n = popcount(mask);
+      if(n < best){ best = n; cell = i; bestMask = mask; if(n < 2) break; }
+    }
+    if(cell < 0){ found++; return; }
+    if(best === 0) return;
+    for(let v = 1; v <= 9; v++){
+      if(bestMask & BIT[v]){
+        g[cell] = v; go(); g[cell] = 0;
+        if(found >= limit) return;
+      }
+    }
+  })();
+  return found;
+}
+
+/* ==================================================================
+   4. ตัวแก้แบบ "คิดตามหลัก" — ใช้วัดว่าโจทย์ยากระดับไหนจริงๆ
+      ระดับ 0 naked single      · เห็นช่องที่ลงได้เลขเดียว
+      ระดับ 1 hidden single     · เลขนั้นลงได้ที่เดียวในแถว/หลัก/บล็อก
+      ระดับ 2 locked candidates · ตัดตัวเลือกข้ามบล็อกกับแถว
+      ระดับ 3 naked pair/triple · จับคู่-จับสามช่อง
+      ระดับ 4 x-wing            · ตัดตัวเลือกแบบสี่เหลี่ยม
+      ระดับ 5 = เทคนิคข้างบนไม่พอ ต้องเดา
+   ================================================================== */
+function buildCands(g){
+  const cand = new Int16Array(81);
+  for(let i = 0; i < 81; i++){
+    if(g[i]){ cand[i] = 0; continue; }
+    let m = 0x1FF;
+    for(const p of PEERS[i]) if(g[p]) m &= ~BIT[g[p]];
+    cand[i] = m;
+  }
+  return cand;
+}
+function place(g, cand, i, v){
+  g[i] = v; cand[i] = 0;
+  for(const p of PEERS[i]) cand[p] &= ~BIT[v];
+}
+
+function logicRate(puzzle, maxLevel){
+  const g = Uint8Array.from(puzzle);
+  let cand = buildCands(g);
+  let hardest = -1, empty = 0;
+  for(let i = 0; i < 81; i++) if(!g[i]) empty++;
+
+  while(empty > 0){
+    let moved = false;
+
+    // --- ระดับ 0: naked single ---
+    for(let i = 0; i < 81 && !moved; i++){
+      if(!g[i] && popcount(cand[i]) === 1){
+        place(g, cand, i, lowbit(cand[i])); empty--; moved = true;
+        hardest = Math.max(hardest, 0);
+      }
+      if(!g[i] && cand[i] === 0) return {level: 9, solved: false};
+    }
+    if(moved) continue;
+    if(maxLevel < 1) break;
+
+    // --- ระดับ 1: hidden single ---
+    for(const u of UNITS){
+      for(let v = 1; v <= 9 && !moved; v++){
+        let spot = -1, n = 0;
+        for(const i of u){
+          if(g[i] === v){ n = 0; break; }
+          if(!g[i] && (cand[i] & BIT[v])){ spot = i; n++; }
+        }
+        if(n === 1){
+          place(g, cand, spot, v); empty--; moved = true;
+          hardest = Math.max(hardest, 1);
+        }
+      }
+      if(moved) break;
+    }
+    if(moved) continue;
+    if(maxLevel < 2) break;
+
+    // --- ระดับ 2: locked candidates ---
+    for(let b = 0; b < 9 && !moved; b++){
+      for(let v = 1; v <= 9; v++){
+        const spots = BOX[b].filter(i => !g[i] && (cand[i] & BIT[v]));
+        if(spots.length < 2) continue;
+        const rows = new Set(spots.map(i => (i / 9) | 0));
+        const cols = new Set(spots.map(i => i % 9));
+        const strip = (line) => {
+          let cut = false;
+          for(const i of line){
+            if(!spots.includes(i) && !g[i] && (cand[i] & BIT[v])){ cand[i] &= ~BIT[v]; cut = true; }
+          }
+          return cut;
+        };
+        if(rows.size === 1 && strip(ROW[[...rows][0]])) moved = true;
+        if(cols.size === 1 && strip(COL[[...cols][0]])) moved = true;
+        if(moved){ hardest = Math.max(hardest, 2); break; }
+      }
+    }
+    if(moved) continue;
+    for(const line of [...ROW, ...COL]){
+      for(let v = 1; v <= 9 && !moved; v++){
+        const spots = line.filter(i => !g[i] && (cand[i] & BIT[v]));
+        if(spots.length < 2) continue;
+        const boxes = new Set(spots.map(i => (((i / 9) | 0) / 3 | 0) * 3 + ((i % 9) / 3 | 0)));
+        if(boxes.size !== 1) continue;
+        for(const i of BOX[[...boxes][0]]){
+          if(!spots.includes(i) && !g[i] && (cand[i] & BIT[v])){ cand[i] &= ~BIT[v]; moved = true; }
+        }
+        if(moved) hardest = Math.max(hardest, 2);
+      }
+      if(moved) break;
+    }
+    if(moved) continue;
+    if(maxLevel < 3) break;
+
+    // --- ระดับ 3: naked pair / triple ---
+    for(const u of UNITS){
+      const open = u.filter(i => !g[i]);
+      for(let size = 2; size <= 3 && !moved; size++){
+        const combos = (arr, k, start = 0, cur = []) => {
+          if(cur.length === k) return [cur.slice()];
+          const out = [];
+          for(let x = start; x < arr.length; x++){ cur.push(arr[x]); out.push(...combos(arr, k, x + 1, cur)); cur.pop(); }
+          return out;
+        };
+        for(const set of combos(open, size)){
+          let mask = 0;
+          for(const i of set) mask |= cand[i];
+          if(popcount(mask) !== size) continue;
+          for(const i of open){
+            if(set.includes(i)) continue;
+            if(cand[i] & mask){ cand[i] &= ~mask; moved = true; }
+          }
+          if(moved){ hardest = Math.max(hardest, 3); break; }
+        }
+      }
+      if(moved) break;
+    }
+    if(moved) continue;
+    if(maxLevel < 4) break;
+
+    // --- ระดับ 4: x-wing ---
+    for(let v = 1; v <= 9 && !moved; v++){
+      for(const [lines, other] of [[ROW, COL], [COL, ROW]]){
+        const pos = lines.map(line => line.filter(i => !g[i] && (cand[i] & BIT[v])));
+        for(let a = 0; a < 9 && !moved; a++){
+          if(pos[a].length !== 2) continue;
+          const ka = pos[a].map(i => lines === ROW ? i % 9 : (i / 9) | 0);
+          for(let b2 = a + 1; b2 < 9 && !moved; b2++){
+            if(pos[b2].length !== 2) continue;
+            const kb = pos[b2].map(i => lines === ROW ? i % 9 : (i / 9) | 0);
+            if(ka[0] !== kb[0] || ka[1] !== kb[1]) continue;
+            for(const k of ka){
+              for(const i of other[k]){
+                const idx = lines === ROW ? (i / 9) | 0 : i % 9;
+                if(idx === a || idx === b2) continue;
+                if(!g[i] && (cand[i] & BIT[v])){ cand[i] &= ~BIT[v]; moved = true; }
+              }
+            }
+            if(moved) hardest = Math.max(hardest, 4);
+          }
+        }
+      }
+    }
+    if(!moved) break;
+  }
+  return {level: empty === 0 ? Math.max(hardest, 0) : 5, solved: empty === 0};
+}
+
+/* ==================================================================
+   5. ระดับความยาก 5 ชั้น
+   ================================================================== */
+const TIERS = [
+  {key:'rookie', name:'มือใหม่',  sub:'เริ่ม 40 ช่อง · เห็นคำตอบตรงๆ',    maxTech:0, minTech:0, minGivens:40, sym:true},
+  {key:'easy',   name:'ง่าย',     sub:'เริ่ม 32 ช่อง · ไล่ดูทีละหน่วย',   maxTech:1, minTech:1, minGivens:32, sym:true},
+  {key:'medium', name:'ปานกลาง',  sub:'เริ่ม 26 ช่อง · ตัดตัวเลือกข้ามบล็อก', maxTech:2, minTech:2, minGivens:26, sym:false},
+  {key:'hard',   name:'ยาก',      sub:'เริ่ม 24 ช่อง · จับคู่ตัวเลือกเป็นชุด', maxTech:3, minTech:3, minGivens:23, sym:false},
+  {key:'master', name:'มาสเตอร์', sub:'เทคนิคลึก บางข้อต้องลองผิดลองถูก', maxTech:5, minTech:4, minGivens:22, sym:false}
+];
+
+/* ==================================================================
+   6. สร้างโจทย์จากหมายเลขข้อ (deterministic)
+      ข้อเดิม + ระดับเดิม = โจทย์เดิมเป๊ะ ทุกเครื่อง ทุกครั้ง
+   ================================================================== */
+function generate(tierIdx, num){
+  const tier = TIERS[tierIdx];
+  let best = null;
+
+  for(let attempt = 0; attempt < 14; attempt++){
+    const seed = (tierIdx * 7919 + num * 104729 + attempt * 15485863) >>> 0;
+    const rand = mulberry(seed);
+    const sol = fullGrid(rand);
+    const puz = Uint8Array.from(sol);
+
+    const order = shuffle([...Array(81).keys()], rand);
+    for(const i of order){
+      if(!puz[i]) continue;
+      const pair = tier.sym ? 80 - i : i;
+      const saved = [puz[i], puz[pair]];
+      puz[i] = 0; puz[pair] = 0;
+
+      let givens = 0;
+      for(let k = 0; k < 81; k++) if(puz[k]) givens++;
+
+      let keep = givens >= tier.minGivens && countSolutions(puz, 2) === 1;
+      if(keep && tier.maxTech < 5) keep = logicRate(puz, tier.maxTech).solved;
+      if(!keep){ puz[i] = saved[0]; puz[pair] = saved[1]; }
+    }
+
+    const rating = logicRate(puz, 4);
+    const level = rating.solved ? rating.level : 5;
+    let givens = 0;
+    for(let k = 0; k < 81; k++) if(puz[k]) givens++;
+
+    if(!best || level > best.level) best = {puz, sol, level, givens};
+    if(level >= tier.minTech && level <= tier.maxTech) return {puzzle: puz, solution: sol, level, givens};
+  }
+  return {puzzle: best.puz, solution: best.sol, level: best.level, givens: best.givens};
+}
+
+
+
+/* ==================================================================
+   7. โครงหลักสูตร — ปลดล็อกทีละระดับ
+   ================================================================== */
+const PER_TIER  = 200;   // ข้อต่อระดับ  (5 ระดับ × 200 = 1000 แบบฝึก)
+const PER_PAGE  = 25;    // ข้อต่อหน้า
+const PAGES     = Math.ceil(PER_TIER / PER_PAGE);   // = 8 หน้า
+const UNLOCK    = 10;    // ต้องผ่านกี่ข้อของระดับก่อนหน้า จึงจะเปิดระดับถัดไป
+
+/* ==================================================================
+   8. บันทึกความคืบหน้า
+   ================================================================== */
+const save = {best: {}, hintsTotal: 0};
+const KEY = 'sudoku1000v2';
+/* ไล่หาที่เก็บตามลำดับ: window.storage (หน้าตัวอย่าง) → localStorage (แอปจริง) → หน่วยความจำ */
+const storage = {
+  async load(){
+    try{
+      const r = await window.storage.get(KEY);
+      if(r && r.value){ Object.assign(save, JSON.parse(r.value)); return; }
+    }catch(e){}
+    try{
+      const raw = window.localStorage.getItem(KEY);
+      if(raw) Object.assign(save, JSON.parse(raw));
+    }catch(e){}
+  },
+  async put(){
+    const json = JSON.stringify(save);
+    let ok = false;
+    try{ await window.storage.set(KEY, json); ok = true; }catch(e){}
+    if(!ok){ try{ window.localStorage.setItem(KEY, json); }catch(e){} }
+  }
+};
+const bestKey   = (t, n) => TIERS[t].key + ':' + n;
+const doneCount = t => Object.keys(save.best).filter(k => k.startsWith(TIERS[t].key + ':')).length;
+const isOpen    = t => t === 0 || doneCount(t - 1) >= UNLOCK;
+const topOpen   = () => { let t = 0; while(t < 4 && isOpen(t + 1)) t++; return t; };
+
+/* ==================================================================
+   9. สถานะและการสลับหน้าจอ
+   ================================================================== */
+const $ = id => document.getElementById(id);
+const buzz = p => { try{ navigator.vibrate && navigator.vibrate(p); }catch(e){} };
+
+let wake = null;
+async function keepAwake(on){
+  try{
+    if(on && !wake && 'wakeLock' in navigator){
+      wake = await navigator.wakeLock.request('screen');
+      wake.addEventListener('release', () => { wake = null; });
+    }else if(!on && wake){ await wake.release(); wake = null; }
+  }catch(e){ wake = null; }
+}
+
+const views = {home: $('vHome'), pick: $('vPick'), game: $('vGame')};
+function view(name){ for(const k in views) views[k].classList.toggle('hide', k !== name); }
+function veil(id, on){ $(id).classList.toggle('hide', !on); }
+
+let tierIdx = 0, page = 0, G = null;
+
+function fmt(ms){
+  const s = Math.floor(ms / 1000);
+  const h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60, sec = s % 60;
+  return h ? `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`
+           : `${m}:${String(sec).padStart(2,'0')}`;
+}
+
+/* ---------- หน้าแรก ---------- */
+function drawHome(){
+  const wrap = $('tiers');
+  wrap.innerHTML = '';
+  TIERS.forEach((t, idx) => {
+    const done = doneCount(idx), open = isOpen(idx);
+    const b = document.createElement('button');
+    b.className = 'tier' + (open ? '' : ' locked');
+    const steps = Array.from({length: 5}, (_, k) =>
+      `<i class="step${k <= idx ? ' on' : ''}" style="height:${5 + k * 3.5}px"></i>`).join('');
+    const right = open
+      ? `<span class="tier-right"><b>${done}</b>/${PER_TIER}</span>`
+      : `<span class="tier-right"><span class="lockmark">✦</span><br>${doneCount(idx-1)}/${UNLOCK}</span>`;
+    const sub = open ? t.sub : `ผ่าน ${TIERS[idx-1].name} ให้ครบ ${UNLOCK} ข้อก่อน`;
+    b.innerHTML = `<span class="steps">${steps}</span>
+      <span><span class="tier-name">${t.name}</span><span class="tier-sub">${sub}</span></span>${right}`;
+    if(open) b.onclick = () => openPick(idx);
+    else b.disabled = true;
+    wrap.appendChild(b);
+  });
+  const all = TIERS.reduce((s, _, i) => s + doneCount(i), 0);
+  $('homeNote').textContent = all
+    ? `ผ่านแล้ว ${all} จาก 1000 ข้อ · ใช้ตัวช่วยไป ${save.hintsTotal} ครั้ง`
+    : `ทุกข้อมีคำตอบเดียวเสมอ · ผ่าน ${UNLOCK} ข้อในระดับหนึ่ง เพื่อเปิดระดับถัดไป`;
+}
+
+/* ---------- เลือกข้อ ---------- */
+function openPick(idx){
+  if(!isOpen(idx)) return;
+  tierIdx = idx;
+  page = Math.min(Math.floor(doneCount(idx) / PER_PAGE), PAGES - 1);
+  $('pickName').textContent = TIERS[idx].name;
+  drawNums();
+  view('pick');
+}
+function drawNums(){
+  const done = doneCount(tierIdx);
+  $('pickSub').textContent = `ผ่านแล้ว ${done} จาก ${PER_TIER} ข้อ`;
+  const start = page * PER_PAGE + 1;
+  const end = Math.min(start + PER_PAGE - 1, PER_TIER);
+  $('rangeLbl').textContent = `ข้อ ${start}–${end}`;
+  $('pgLbl').textContent = `${page + 1} / ${PAGES}`;
+  $('pgPrev').disabled = page === 0;
+  $('pgNext').disabled = page >= PAGES - 1;
+
+  const box = $('nums');
+  box.innerHTML = '';
+  for(let n = start; n <= end; n++){
+    const b = document.createElement('button');
+    b.className = 'num';
+    const rec = save.best[bestKey(tierIdx, n)];
+    b.innerHTML = rec ? `${n}<small>${fmt(rec)}</small>` : `${n}`;
+    if(rec) b.classList.add('done');
+    b.onclick = () => startGame(tierIdx, n);
+    box.appendChild(b);
+  }
+
+  const next = tierIdx + 1;
+  $('pickNote').textContent = next < 5
+    ? (isOpen(next) ? `ระดับ ${TIERS[next].name} เปิดแล้ว`
+                    : `อีก ${UNLOCK - done} ข้อ จะเปิดระดับ ${TIERS[next].name}`)
+    : 'ระดับสูงสุดแล้ว';
+}
+function firstUnsolved(){
+  for(let n = 1; n <= PER_TIER; n++) if(!save.best[bestKey(tierIdx, n)]) return n;
+  return 1;
+}
+
+/* ---------- เริ่มเกม ---------- */
+function startGame(t, n){
+  tierIdx = t;
+  veil('vLoad', true);
+  $('loadMsg').textContent = `กำลังสร้างโจทย์ ${TIERS[t].name} ข้อ ${n}`;
+  requestAnimationFrame(() => setTimeout(() => {
+    const made = generate(t, n);
+    G = {
+      tier: t, num: n,
+      puzzle: made.puzzle, solution: made.solution,
+      board: Uint8Array.from(made.puzzle),
+      notes: new Int16Array(81),
+      history: [], sel: -1, noteMode: false,
+      hints: 0, mistakes: 0,
+      elapsed: 0, running: true, done: false
+    };
+    $('gName').textContent = `${TIERS[t].name} · ข้อ ${n}`;
+    $('gSub').textContent = `ตัวเลขเริ่มต้น ${made.givens} ช่อง`;
+    $('time').textContent = '0:00';
+    buildBoard();
+    render();
+    keepAwake(true);
+    veil('vLoad', false);
+    view('game');
+    fitBoard();
+  }, 16));
+}
+
+/* ---------- ปรับขนาดกระดานให้พอดีกับที่ว่างที่เหลือจริง ----------
+   CSS อย่างเดียวคำนวณกรณีนี้ไม่แน่นอนข้ามเบราว์เซอร์
+   วัดกล่องที่เหลือแล้วสั่งขนาดตรงๆ ชัวร์กว่า                      */
+function fitBoard(){
+  const wrap = $('boardWrap'), b = $('board');
+  if(!wrap || !b || !wrap.clientHeight) return;
+  const side = Math.floor(Math.min(wrap.clientWidth, wrap.clientHeight));
+  const size = Math.max(200, side - (side % 9));   // หารด้วย 9 ลงตัว เส้นจะได้ไม่เบลอ
+  b.style.width = size + 'px';
+  b.style.height = size + 'px';
+  b.style.setProperty('--cell', (size / 9) + 'px');
+}
+let fitTimer = null;
+function fitSoon(){ clearTimeout(fitTimer); fitTimer = setTimeout(fitBoard, 60); }
+window.addEventListener('resize', fitSoon);
+window.addEventListener('orientationchange', fitSoon);
+
+/* ---------- กระดาน ---------- */
+const cells = [];
+function buildBoard(){
+  if(cells.length === 81) return;
+  const board = $('board');
+  for(let i = 0; i < 81; i++){
+    const d = document.createElement('div');
+    d.className = `cell r${(i/9)|0} c${i%9}`;
+    d.setAttribute('role', 'gridcell');
+    d.onclick = () => { G.sel = i; render(); };
+    board.appendChild(d);
+    cells.push(d);
+  }
+}
+function render(){
+  if(!G) return;
+  const sel = G.sel;
+  const selVal = sel >= 0 ? G.board[sel] : 0;
+  const peerSet = sel >= 0 ? new Set(PEERS[sel]) : null;
+
+  for(let i = 0; i < 81; i++){
+    const el = cells[i], v = G.board[i];
+    const given = G.puzzle[i] !== 0;
+    let cls = `cell r${(i/9)|0} c${i%9}`;
+    if(peerSet && peerSet.has(i)) cls += ' peer';
+    if(selVal && v === selVal && i !== sel) cls += ' twin';
+    if(i === sel) cls += ' sel';
+    if(v){
+      cls += given ? ' given' : ' user';
+      if(!given && v !== G.solution[i]) cls += ' bad';
+    }
+    el.className = cls;
+
+    if(v) el.textContent = v;
+    else if(G.notes[i]){
+      let h = '<div class="notes">';
+      for(let d = 1; d <= 9; d++) h += `<b>${G.notes[i] & BIT[d] ? d : ''}</b>`;
+      el.innerHTML = h + '</div>';
+    }
+    else el.textContent = '';
+  }
+  for(let d = 1; d <= 9; d++){
+    let used = 0;
+    for(let i = 0; i < 81; i++) if(G.board[i] === d) used++;
+    const k = $('key' + d);
+    k.classList.toggle('spent', used >= 9);
+    k.querySelector('i').textContent = 9 - used;
+  }
+  $('tNote').classList.toggle('on', G.noteMode);
+  $('hintN').textContent = 'ใบ้ ' + G.hints;
+}
+
+/* ---------- ลงเลข ---------- */
+function push(i){
+  G.history.push({i, v: G.board[i], n: G.notes[i]});
+  if(G.history.length > 400) G.history.shift();
+}
+function blink(i){
+  cells[i].classList.add('flash');
+  setTimeout(() => cells[i] && cells[i].classList.remove('flash'), 320);
+}
+function setNum(d){
+  if(!G || G.done || !G.running) return;
+  const i = G.sel;
+  if(i < 0 || G.puzzle[i]) return;
+  if(G.noteMode){
+    if(G.board[i]) return;
+    push(i); G.notes[i] ^= BIT[d];
+  }else{
+    if(G.board[i] === d){ push(i); G.board[i] = 0; render(); return; }
+    push(i);
+    G.board[i] = d; G.notes[i] = 0;
+    if(d !== G.solution[i]){ G.mistakes++; buzz(40); }
+    else for(const p of PEERS[i]) G.notes[p] &= ~BIT[d];
+    blink(i);
+  }
+  render(); checkWin();
+}
+function erase(){
+  if(!G || G.done) return;
+  const i = G.sel;
+  if(i < 0 || G.puzzle[i]) return;
+  push(i); G.board[i] = 0; G.notes[i] = 0; render();
+}
+function undo(){
+  if(!G || G.done || !G.history.length) return;
+  const h = G.history.pop();
+  G.board[h.i] = h.v; G.notes[h.i] = h.n; G.sel = h.i;
+  render();
+}
+function hint(){
+  if(!G || G.done) return;
+  let i = G.sel;
+  if(i < 0 || G.board[i] === G.solution[i]){
+    const open = [];
+    for(let k = 0; k < 81; k++) if(G.board[k] !== G.solution[k]) open.push(k);
+    if(!open.length) return;
+    i = open[(Math.random() * open.length) | 0];
+  }
+  push(i);
+  G.board[i] = G.solution[i]; G.notes[i] = 0;
+  for(const p of PEERS[i]) G.notes[p] &= ~BIT[G.board[i]];
+  G.sel = i; G.hints++; save.hintsTotal++;
+  blink(i); render(); checkWin();
+}
+function checkWin(){
+  for(let i = 0; i < 81; i++) if(G.board[i] !== G.solution[i]) return;
+  G.done = true; G.running = false;
+  keepAwake(false); buzz([40, 70, 40]);
+
+  const openedBefore = topOpen();
+  const ms = G.elapsed, key = bestKey(G.tier, G.num), prev = save.best[key];
+  const isBest = !prev || ms < prev;
+  if(isBest) save.best[key] = ms;
+  storage.put();
+  const openedAfter = topOpen();
+
+  $('wHead').textContent = G.hints ? 'เสร็จแล้ว' : 'เสร็จแบบไม่ใช้ตัวช่วย';
+  $('wTime').textContent = fmt(ms);
+  $('wStats').textContent =
+    `${TIERS[G.tier].name} ข้อ ${G.num} · ใช้ตัวช่วย ${G.hints} ครั้ง · ลงผิด ${G.mistakes} ครั้ง` +
+    (prev && !isBest ? ` · สถิติเดิม ${fmt(prev)}` : '');
+
+  let tag = '';
+  if(openedAfter > openedBefore) tag = `เปิดระดับ ${TIERS[openedAfter].name} แล้ว`;
+  else if(isBest && prev) tag = 'ทำสถิติใหม่ของข้อนี้';
+  else if(G.tier + 1 < 5 && !isOpen(G.tier + 1)){
+    const left = UNLOCK - doneCount(G.tier);
+    if(left > 0) tag = `อีก ${left} ข้อ จะเปิดระดับ ${TIERS[G.tier + 1].name}`;
+  }
+  $('wTag').textContent = tag;
+  $('wTag').classList.toggle('hide', !tag);
+  $('bNextP').classList.toggle('hide', G.num >= PER_TIER);
+  setTimeout(() => veil('vWin', true), 240);
+}
+
+/* ---------- นาฬิกา ---------- */
+let last = performance.now();
+function tickClock(now){
+  const dt = now - last; last = now;
+  if(G && G.running && !G.done){
+    G.elapsed += dt;
+    $('time').textContent = fmt(G.elapsed);
+  }
+  requestAnimationFrame(tickClock);
+}
+function pauseGame(){
+  if(!G || G.done) return;
+  G.running = false;
+  keepAwake(false);
+  $('pTime').textContent = fmt(G.elapsed);
+  $('boardWrap').style.visibility = 'hidden';
+  veil('vPause', true);
+}
+function resumeGame(){
+  if(!G) return;
+  G.running = true;
+  keepAwake(true);
+  $('boardWrap').style.visibility = '';
+  veil('vPause', false);
+}
+
+/* ---------- ปุ่มต่างๆ ---------- */
+const pad = $('pad');
+for(let d = 1; d <= 9; d++){
+  const b = document.createElement('button');
+  b.className = 'key'; b.id = 'key' + d;
+  b.innerHTML = `<b>${d}</b><i>9</i>`;
+  b.onclick = () => setNum(d);
+  pad.appendChild(b);
+}
+$('tUndo').onclick  = undo;
+$('tErase').onclick = erase;
+$('tNote').onclick  = () => { if(G){ G.noteMode = !G.noteMode; render(); } };
+$('tHint').onclick  = hint;
+$('pauseB').onclick = pauseGame;
+$('bResume').onclick = resumeGame;
+$('bQuit').onclick   = () => { veil('vPause', false); $('boardWrap').style.visibility = ''; G = null; openPick(tierIdx); };
+$('gameBack').onclick = () => { G = null; openPick(tierIdx); };
+$('pickBack').onclick = () => { drawHome(); view('home'); };
+$('bWipe').onclick = async () => {
+  const all = TIERS.reduce((sum, _, i) => sum + doneCount(i), 0);
+  if(!all){ alert('ยังไม่มีสถิติให้ล้าง'); return; }
+  if(!confirm(`ล้างสถิติทั้งหมด ${all} ข้อ?\n\nระดับที่ปลดล็อกไว้จะกลับไปเริ่มที่มือใหม่ใหม่ทั้งหมด และย้อนกลับไม่ได้`)) return;
+  save.best = {}; save.hintsTotal = 0;
+  try{ await window.storage.delete(KEY); }catch(e){}
+  try{ window.localStorage.removeItem(KEY); }catch(e){}
+  await storage.put();
+  drawHome();
+};
+$('pgPrev').onclick = () => { page--; drawNums(); };
+$('pgNext').onclick = () => { page++; drawNums(); };
+$('bContinue').onclick = () => startGame(tierIdx, firstUnsolved());
+$('bRandom').onclick   = () => startGame(tierIdx, 1 + ((Math.random() * PER_TIER) | 0));
+$('bNextP').onclick    = () => { veil('vWin', false); startGame(G.tier, Math.min(PER_TIER, G.num + 1)); };
+$('bBackList').onclick = () => { veil('vWin', false); const t = G.tier; G = null; openPick(t); };
+
+/* ---------- คีย์บอร์ด ---------- */
+window.addEventListener('keydown', e => {
+  if(!G || views.game.classList.contains('hide')) return;
+  if(e.key >= '1' && e.key <= '9'){ setNum(+e.key); e.preventDefault(); return; }
+  if(e.key === 'Backspace' || e.key === 'Delete' || e.key === '0'){ erase(); e.preventDefault(); return; }
+  if(e.key === 'n' || e.key === 'N'){ G.noteMode = !G.noteMode; render(); return; }
+  if(e.key === 'h' || e.key === 'H'){ hint(); return; }
+  if(e.key === 'Escape'){ G.running ? pauseGame() : resumeGame(); return; }
+  if((e.ctrlKey || e.metaKey) && e.key === 'z'){ undo(); e.preventDefault(); return; }
+  const step = {ArrowUp: -9, ArrowDown: 9, ArrowLeft: -1, ArrowRight: 1}[e.key];
+  if(step !== undefined){
+    e.preventDefault();
+    const i = G.sel < 0 ? 40 : G.sel + step;
+    if(i >= 0 && i < 81){
+      if(Math.abs(step) === 1 && ((i / 9) | 0) !== ((G.sel / 9) | 0)) return;
+      G.sel = i; render();
+    }
+  }
+});
+
+/* ---------- สลับออกจากแอป ให้พักเกมเอง เวลาจะได้ไม่เดินทิ้ง ---------- */
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'hidden'){
+    if(G && G.running && !G.done) pauseGame();
+  }else if(G && G.running && !G.done){
+    keepAwake(true);
+  }
+});
+window.addEventListener('pagehide', () => { if(G && G.running) pauseGame(); });
+
+/* ---------- ทำให้เล่นออฟไลน์ได้ ---------- */
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+
+/* ---------- เริ่มทำงาน ---------- */
+storage.load().then(() => {
+  drawHome();
+  view('home');
+  requestAnimationFrame(tickClock);
+});
+})();
+</script>
+</body>
+</html>
