@@ -45,14 +45,16 @@
   --hair:#d3e2ef; --rule:#7ba3c8; --edge:#e2ecf6; --tint:#eaf3fb;
   --peer:#f0f7fd; --twin:#d7e9f8; --sel:#b9dcf7;
   --blue:#2b77bb; --bad:#bf4a61; --bad-bg:#fbeaed;
-  --good:#2a8152; --missed:#a95c71; --future:#c3ccd6;
+  --ok-top:#eaf8f0; --ok-bot:#d2edde; --ok-edge:#b6e0c8; --ok-ink:#1f6b47;
+  --missed:#a95c71; --future:#c3ccd6;
 }
 [data-night="1"]{
   --bg:#0f1621; --white:#18202c; --ink:#e6eef7; --soft:#8296ab;
   --hair:#26313f; --rule:#456079; --edge:#222c39; --tint:#1d2836;
   --peer:#1b2532; --twin:#254257; --sel:#2f5b80;
   --blue:#5aa9e6; --bad:#e0748a; --bad-bg:#3a2029;
-  --good:#3f9e6c; --missed:#d08296; --future:#3a4554;
+  --ok-top:#26473b; --ok-bot:#1c3a30; --ok-edge:#2f5a49; --ok-ink:#8ee0b4;
+  --missed:#d08296; --future:#3a4554;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{height:100%;overscroll-behavior:none}
@@ -217,7 +219,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .tool:disabled .bdg{color:var(--soft)}
 
 /* ── เช็คอิน ── */
-.calhead{display:flex;align-items:center;justify-content:space-between;padding:2px 4px 10px;flex:none}
+.calhead{display:flex;align-items:center;justify-content:center;padding:2px 4px 12px;flex:none}
 .calhead h2{font-size:15px;font-weight:500}
 .caldow{display:grid;grid-template-columns:repeat(7, minmax(0,1fr));gap:5px;margin-bottom:6px}
 .caldow span{text-align:center;font-size:10.5px;font-weight:300;color:var(--soft)}
@@ -226,11 +228,20 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
   font-family:'IBM Plex Mono',monospace;font-size:13px;font-variant-numeric:tabular-nums;
   background:var(--tint);color:var(--ink)}
 .day.blank{background:transparent}
-.day.ok{background:var(--good);color:#fff;font-weight:500}
+.day.ok{
+  background:linear-gradient(180deg, var(--ok-top) 0%, var(--ok-bot) 100%);
+  color:var(--ok-ink); font-weight:500;
+  border:1px solid var(--ok-edge);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75), 0 1px 1.5px rgba(31,107,71,.14);
+}
 .day.miss{background:transparent;border:1px dashed var(--missed);color:var(--missed)}
 .day.future{background:transparent;color:var(--future)}
 .day.today{box-shadow:inset 0 0 0 2px var(--blue);color:var(--blue);font-weight:500;background:var(--white)}
-.day.today.ok{box-shadow:inset 0 0 0 2px var(--blue);color:#fff;background:var(--good)}
+.day.today.ok{
+  background:linear-gradient(180deg, var(--ok-top) 0%, var(--ok-bot) 100%);
+  border-color:var(--blue); color:var(--ok-ink);
+  box-shadow:inset 0 0 0 1px var(--blue), inset 0 1px 0 rgba(255,255,255,.7), 0 1px 1.5px rgba(31,107,71,.14);
+}
 .legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:14px;font-size:11px;
   font-weight:300;color:var(--soft)}
 .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
@@ -243,7 +254,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 /* ── สถิติ ── */
 .statgrid{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:8px;flex:none}
 .stat{background:var(--white);border:1px solid var(--edge);border-radius:13px;padding:13px 10px;text-align:center}
-.stat b{display:block;font-family:'IBM Plex Mono',monospace;font-size:21px;font-weight:500;line-height:1.2}
+.stat b{display:block;font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:500;line-height:1.25;white-space:nowrap}
 .stat span{display:block;font-size:10.5px;font-weight:300;color:var(--soft);margin-top:3px}
 .trow{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;
   padding:11px 14px;border-bottom:1px solid var(--edge);font-size:13px}
@@ -302,6 +313,8 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
       <p>1000 แบบฝึก · ห้าระดับ</p>
     </div>
     <div class="headbtns">
+      <button class="ibtn hide" id="bCheckIcon" aria-label="ปฏิทินเช็คอิน">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg></button>
       <button class="ibtn" id="bStats" aria-label="สถิติ">
         <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></button>
       <button class="ibtn" id="bSet" aria-label="ตั้งค่า">
@@ -375,15 +388,11 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
   </div>
 
   <div class="card" style="padding:14px 15px">
-    <div class="calhead">
-      <button class="back" id="calPrev" aria-label="เดือนก่อน">‹</button>
-      <h2 id="calTitle">กันยายน 2569</h2>
-      <button class="back" id="calNext" aria-label="เดือนถัดไป">›</button>
-    </div>
+    <div class="calhead"><h2 id="calTitle">กันยายน 2569</h2></div>
     <div class="caldow"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>
     <div class="calgrid" id="calGrid"></div>
     <div class="legend">
-      <span><i style="background:var(--good)"></i>เช็คอินแล้ว</span>
+      <span><i style="background:var(--ok-bot);border:1px solid var(--ok-edge)"></i>เช็คอินแล้ว</span>
       <span><i style="border:1px dashed var(--missed)"></i>พลาด</span>
       <span><i style="background:var(--tint)"></i>ยังไม่ถึง</span>
     </div>
@@ -796,13 +805,16 @@ const MILESTONE = 5, MILESTONE_REWARD = 2, START_ITEMS = 3, MAX_ITEMS = 9;
 /* โหมดเข้มงวด: ลงผิดเกินเป้าภารกิจของระดับนั้นเมื่อไหร่ถือว่าแพ้
    ผูกกับ CHAL เพื่อไม่ให้ขัดกับตัวเลขที่แสดงบนแถบภารกิจ */
 const strictCap = t => CHAL[t].miss + 1;
-const TECH = ['เห็นช่องเดียวตรงๆ' ,'เลขลงได้ที่เดียวในหน่วย','ตัดตัวเลือกข้ามบล็อก',
+/* อิโมจิไล่ระดับตามชั้นสูงสุดที่ปลดล็อกแล้ว */
+const RANK_ICON = ['🔰', '🥉', '🥈', '🥇', '🏆'];
+const ITEM_ICON = '💡';
+const TECH = ['เห็นช่องเดียวตรงๆ'  ,'เลขลงได้ที่เดียวในหน่วย','ตัดตัวเลือกข้ามบล็อก',
               'จับคู่ตัวเลือกเป็นชุด','ตัดแบบสี่เหลี่ยม','ต้องลองผิดลองถูก'];
 
 /* ==================================================================
    8. ข้อมูลที่บันทึก
    ================================================================== */
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 const KEY = 'sudoku1000v3';
 const WIP_KEY = 'sudoku1000wip';   /* แยกคีย์ เพราะเขียนบ่อยมากระหว่างเล่น
                                       ถ้าเก็บรวมก้อนเดียวจะต้องเขียน 33KB ทุกครั้งที่ลงเลข */
@@ -961,9 +973,11 @@ function drawHome(){
   $('ccDot').textContent = st.cur > 0 ? '🔥' : '🌱';
   $('ccName').textContent = ckDone ? `เช็คอินแล้ว · ต่อเนื่อง ${st.cur} วัน` : 'เช็คอินวันนี้';
   $('ccSub').textContent = ckDone
-    ? `ตัวช่วย ${save.items}/${MAX_ITEMS} · แตะดูปฏิทินทั้งเดือน`
+    ? `${ITEM_ICON} ตัวช่วย ${save.items}/${MAX_ITEMS} · แตะดูปฏิทินทั้งเดือน`
     : 'รับตัวช่วยฟรี วันละครั้ง';
-  $('bCheckCard').classList.toggle('accent', !ckDone);
+  $('bCheckCard').classList.toggle('hide', ckDone);   /* เช็คอินแล้วซ่อนการ์ด */
+  $('bCheckIcon').classList.toggle('hide', !ckDone);  /* แล้วโผล่เป็นไอคอนข้างปุ่มสถิติแทน */
+  $('bCheckCard').classList.add('accent');
 
   // การ์ดโจทย์ประจำวัน
   const d = dailyInfo();
@@ -997,7 +1011,7 @@ function drawHome(){
 
   const all = TIERS.reduce((s, _, i) => s + doneCount(i), 0);
   $('homeNote').textContent = all
-    ? `ผ่านแล้ว ${all} จาก 1000 ข้อ · ตัวช่วย ${save.items}/${MAX_ITEMS} ชิ้น · เวอร์ชัน ${APP_VERSION}`
+    ? `${RANK_ICON[topOpen()]} ผ่านแล้ว ${all} จาก 1000 ข้อ · ${ITEM_ICON} ${save.items}/${MAX_ITEMS} · เวอร์ชัน ${APP_VERSION}`
     : `ทุกข้อมีคำตอบเดียวเสมอ · ผ่าน ${UNLOCK} ข้อในระดับหนึ่ง เพื่อเปิดระดับถัดไป · เวอร์ชัน ${APP_VERSION}`;
 }
 
@@ -1009,7 +1023,6 @@ function drawHome(){
 const CK_MIN = 1, CK_MAX = 3, CK_WEEK_BONUS = 2;
 const TH_MONTH = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
                   'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-let calView = null;
 
 const checkedToday = () => (save.checkins || []).includes(dayKey());
 
@@ -1043,15 +1056,14 @@ function drawCheck(){
   $('ckFlame').textContent = st.cur > 0 ? '🔥' : '🌱';
   $('bDoCheck').disabled = done;
   $('bDoCheck').textContent = done ? 'เช็คอินวันนี้แล้ว' : 'เช็คอินรับตัวช่วย';
-  $('checkSub').textContent = `รวม ${(save.checkins || []).length} วัน · สูงสุด ${st.best} วันติดกัน`;
+  $('checkSub').textContent = `รวม ${(save.checkins || []).length} วัน · สูงสุด ${st.best} วันติดกัน · ${ITEM_ICON} ${save.items}/${MAX_ITEMS}`;
   if(!done) $('checkNote').textContent = 'เช็คอินได้วันละครั้ง ย้อนหลังไม่ได้';
   drawCal();
 }
 
 function drawCal(){
   const now = new Date();
-  if(!calView) calView = {y: now.getFullYear(), m: now.getMonth()};
-  const {y, m} = calView;
+  const y = now.getFullYear(), m = now.getMonth();   /* ดูได้เฉพาะเดือนปัจจุบัน */
   $('calTitle').textContent = `${TH_MONTH[m]} ${y + 543}`;
   const lead = new Date(y, m, 1).getDay();
   const total = new Date(y, m + 1, 0).getDate();
@@ -1069,14 +1081,6 @@ function drawCal(){
     html += `<div class="${cls}">${d}</div>`;
   }
   $('calGrid').innerHTML = html;
-  $('calNext').disabled = (y === now.getFullYear() && m === now.getMonth());
-}
-function shiftMonth(step){
-  const now = new Date();
-  const d = new Date(calView.y, calView.m + step, 1);
-  if(d > now && !(d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth())) return;
-  calView = {y: d.getFullYear(), m: d.getMonth()};
-  drawCal();
 }
 
 /* ==================================================================
@@ -1146,9 +1150,9 @@ function drawStats(){
   const st = streak();
   $('statsSub').textContent = `ผ่านแล้ว ${total} จาก 1000 ข้อ`;
   $('statTop').innerHTML = `
-    <div class="stat"><b>${total}</b><span>ข้อที่ผ่าน</span></div>
+    <div class="stat"><b>${RANK_ICON[topOpen()]} ${total}</b><span>ข้อที่ผ่าน · ${TIERS[topOpen()].name}</span></div>
     <div class="stat"><b>${st.cur > 0 ? '🔥' : '🌱'} ${st.cur}</b><span>เช็คอินต่อเนื่อง (วัน)</span></div>
-    <div class="stat"><b>${save.items}</b><span>ตัวช่วยที่มี</span></div>`;
+    <div class="stat"><b>${ITEM_ICON} ${save.items}</b><span>ตัวช่วยที่มี</span></div>`;
 
   let html = `<div class="trow hdr"><span>ระดับ</span><em>ผ่าน</em><em>เร็วสุด</em><em>เฉลี่ย</em></div>`;
   TIERS.forEach((t, i) => {
@@ -1576,11 +1580,11 @@ $('pgPrev').onclick = () => { page--; drawNums(); };
 $('pgNext').onclick = () => { page++; drawNums(); };
 $('bContinue').onclick = () => startGame(tierIdx, firstUnsolved());
 
-$('bCheckCard').onclick = () => { calView = null; drawCheck(); view('check'); };
+const openCheck = () => { drawCheck(); view('check'); };
+$('bCheckCard').onclick = openCheck;
+$('bCheckIcon').onclick = openCheck;
 $('checkBack').onclick = () => { drawHome(); view('home'); };
 $('bDoCheck').onclick = doCheckin;
-$('calPrev').onclick = () => shiftMonth(-1);
-$('calNext').onclick = () => shiftMonth(1);
 $('bStats').onclick = () => { drawStats(); view('stats'); };
 $('statsBack').onclick = () => { drawHome(); view('home'); };
 $('bSet').onclick = () => { drawSet(); view('set'); };
