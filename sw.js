@@ -5,7 +5,7 @@
 
    เลื่อนเลข VERSION เมื่อแก้ไฟล์อื่นที่ไม่ใช่ index.html
    (ตัว index.html ไม่ต้องเลื่อนแล้ว เพราะดึงสดทุกครั้งที่ออนไลน์) */
-const VERSION = 'sudoku-v3';
+const VERSION = 'sudoku-v8';
 const DOC = './index.html';
 const FILES = [
   './',

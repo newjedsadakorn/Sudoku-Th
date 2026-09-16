@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ซูโดกุ 1000 แบบฝึก</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#f2f7fc">
+<meta name="theme-color" content="#f2f7fc" id="metaTheme">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -17,57 +17,69 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f2f7fc;          /* ฟ้าอ่อนจางที่สุด ใช้เป็นพื้นหลัง */
-  --white:#ffffff;
-  --ink:#16212f;         /* น้ำเงินเข้มเกือบดำ ใช้แทนสีดำ */
-  --soft:#78899d;
-  --hair:#d3e2ef;        /* เส้นแบ่งช่องย่อย */
-  --rule:#7ba3c8;        /* เส้นแบ่งบล็อก 3×3 */
-  --edge:#e2ecf6;        /* ขอบการ์ด */
-  --tint:#eaf3fb;        /* ฟ้าอ่อนสำหรับพื้นปุ่ม */
-  --peer:#f0f7fd;        /* แถว/หลัก/บล็อกเดียวกับช่องที่เลือก */
-  --twin:#d7e9f8;        /* ช่องที่มีเลขเดียวกัน */
-  --sel:#b9dcf7;         /* ช่องที่เลือกอยู่ */
-  --blue:#2e7fc4;        /* เลขที่ผู้เล่นกรอก + สีเน้น */
-  --bad:#c9556c;
-  --bad-bg:#fbeaed;
+  --bg:#f2f7fc; --white:#ffffff; --ink:#16212f; --soft:#78899d;
+  --hair:#d3e2ef; --rule:#7ba3c8; --edge:#e2ecf6; --tint:#eaf3fb;
+  --peer:#f0f7fd; --twin:#d7e9f8; --sel:#b9dcf7;
+  --blue:#2e7fc4; --bad:#c9556c; --bad-bg:#fbeaed;
+}
+[data-night="1"]{
+  --bg:#0f1621; --white:#18202c; --ink:#e6eef7; --soft:#8296ab;
+  --hair:#26313f; --rule:#456079; --edge:#222c39; --tint:#1d2836;
+  --peer:#1b2532; --twin:#254257; --sel:#2f5b80;
+  --blue:#5aa9e6; --bad:#e0748a; --bad-bg:#3a2029;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{height:100%;overscroll-behavior:none}
 body{
-  height:100dvh; overflow:hidden;            /* สูงเท่าจอพอดี ไม่มีการเลื่อน */
-  overscroll-behavior:none;                 /* กันดึงหน้าจอลงแล้วรีเฟรช */
-  touch-action:manipulation;                /* กันแตะสองครั้งแล้วซูม */
-  -webkit-user-select:none; user-select:none;
-  -webkit-touch-callout:none;               /* กันกดค้างแล้วเด้งเมนู */
+  height:100dvh; overflow:hidden;
+  overscroll-behavior:none; touch-action:manipulation;
+  -webkit-user-select:none; user-select:none; -webkit-touch-callout:none;
   background:var(--bg); color:var(--ink);
   font-family:'IBM Plex Sans Thai',-apple-system,'Segoe UI',sans-serif;
   font-weight:400; display:flex; justify-content:center;
   padding:10px 10px calc(8px + env(safe-area-inset-bottom));
-  overflow-x:hidden;
+  transition:background-color .2s ease, color .2s ease;
 }
 #app{width:100%;max-width:460px;height:100%;display:flex;flex-direction:column}
 #app > section{flex:1;min-height:0;display:flex;flex-direction:column;gap:12px}
-#vHome,#vPick{overflow-y:auto;-webkit-overflow-scrolling:touch}
+#vHome,#vPick,#vStats,#vSet{overflow-y:auto;-webkit-overflow-scrolling:touch}
 button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer}
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
 .hide{display:none !important}
 .mono{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
 .card{background:var(--white);border:1px solid var(--edge);border-radius:14px}
 
-/* ─────────── หน้าแรก ─────────── */
-.head{padding:14px 2px 4px;flex:none}
-.head h1{font-size:26px;font-weight:500;letter-spacing:-.015em;line-height:1.15}
-.head p{font-size:13px;font-weight:300;color:var(--soft);margin-top:5px}
+/* ── หัวหน้าแรก ── */
+.head{padding:12px 2px 2px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px;flex:none}
+.head h1{font-size:25px;font-weight:500;letter-spacing:-.015em;line-height:1.15}
+.head p{font-size:12.5px;font-weight:300;color:var(--soft);margin-top:4px}
+.headbtns{display:flex;gap:6px;flex:none}
+.ibtn{width:36px;height:36px;border-radius:11px;background:var(--white);border:1px solid var(--edge);
+  display:grid;place-items:center;flex:none}
+.ibtn svg{width:18px;height:18px;stroke:var(--soft);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ibtn:active{transform:scale(.94)}
 
-.tiers{display:flex;flex-direction:column;gap:9px;flex:1;justify-content:center}
-.tier{
-  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;
-  padding:15px 16px;text-align:left;
+/* ── การ์ดเล่นต่อ / โจทย์ประจำวัน ── */
+.banner{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:13px;
+  padding:13px 15px;text-align:left;flex:none;
   background:var(--white);border:1px solid var(--edge);border-radius:14px;
-  transition:border-color .12s ease, transform .12s ease;
 }
-.tier:not(.locked):hover{border-color:var(--rule)}
+.banner.accent{background:var(--blue);border-color:var(--blue);color:#fff}
+.banner.accent .b-sub{color:rgba(255,255,255,.8)}
+.banner.accent .dot{background:rgba(255,255,255,.25)}
+.banner:active{transform:scale(.99)}
+.dot{width:34px;height:34px;border-radius:11px;background:var(--tint);display:grid;place-items:center;flex:none}
+.dot svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.b-name{font-size:14.5px;font-weight:500;display:block;line-height:1.35}
+.b-sub{font-size:12px;font-weight:300;color:var(--soft);display:block;margin-top:1px}
+.b-go{font-size:18px;opacity:.5;flex:none}
+
+/* ── รายการระดับ ── */
+.tiers{display:flex;flex-direction:column;gap:8px;flex:none}
+.tier{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:13px;
+  padding:14px 15px;text-align:left;
+  background:var(--white);border:1px solid var(--edge);border-radius:14px}
 .tier:not(.locked):active{transform:scale(.99)}
 .tier.locked{background:transparent;border-style:dashed;cursor:default}
 .tier.locked .tier-name,.tier.locked .tier-sub{color:var(--soft)}
@@ -75,84 +87,66 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .step{width:4px;border-radius:1px;background:var(--hair)}
 .step.on{background:var(--blue)}
 .tier.locked .step.on{background:var(--hair)}
-.tier-name{font-size:16px;font-weight:500;display:block;line-height:1.35}
-.tier-sub{font-size:12.5px;font-weight:300;color:var(--soft);display:block;margin-top:1px}
-.tier-right{text-align:right;font-size:12px;color:var(--soft);line-height:1.5;flex:none}
-.tier-right b{display:block;font-size:17px;font-weight:500;color:var(--ink);font-family:'IBM Plex Mono',monospace}
-.lockmark{font-size:15px;color:var(--soft)}
-.wipe{
-  align-self:center;flex:none;margin-top:-4px;padding:8px 14px;
-  font-size:11.5px;font-weight:300;color:var(--soft);border-radius:9px;
-}
-.wipe:hover{background:var(--tint);color:var(--bad)}
-.note{font-size:12px;font-weight:300;color:var(--soft);text-align:center;line-height:1.8;padding:2px 8px}
+.tier-name{font-size:15.5px;font-weight:500;display:block;line-height:1.35}
+.tier-sub{font-size:12px;font-weight:300;color:var(--soft);display:block;margin-top:1px}
+.tier-right{text-align:right;font-size:11.5px;color:var(--soft);line-height:1.5;flex:none}
+.tier-right b{display:block;font-size:16px;font-weight:500;color:var(--ink);font-family:'IBM Plex Mono',monospace}
+#homeNote{margin-top:auto}        /* ดันหมายเหตุลงไปติดขอบล่าง ช่องว่างจะได้รวมเป็นก้อนเดียว */
+.note{font-size:11.5px;font-weight:300;color:var(--soft);text-align:center;line-height:1.8;padding:2px 8px;flex:none}
 
-/* ─────────── เลือกข้อ ─────────── */
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px}
+/* ── แถบบน ── */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:none}
 .topleft{display:flex;align-items:center;gap:11px;min-width:0}
-.back{
-  width:34px;height:34px;border-radius:10px;flex:none;
-  background:var(--white);border:1px solid var(--edge);
-  display:grid;place-items:center;font-size:17px;color:var(--soft);
-}
+.back{width:34px;height:34px;border-radius:10px;flex:none;background:var(--white);
+  border:1px solid var(--edge);display:grid;place-items:center;font-size:17px;color:var(--soft)}
 .back:active{transform:scale(.94)}
 .top-h{font-size:15px;font-weight:500;line-height:1.3}
-.top-s{font-size:11.5px;font-weight:300;color:var(--soft)}
+.top-s{font-size:11px;font-weight:300;color:var(--soft)}
 
-.pick-body{padding:15px;flex:1;min-height:0;display:flex;flex-direction:column}
+/* ── เลือกข้อ ── */
+.pick-body{padding:15px;flex:none;margin:auto 0;display:flex;flex-direction:column}
 .pick-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;flex:none}
-.pick-head h2{font-size:13.5px;font-weight:400;color:var(--soft)}
+.pick-head h2{font-size:13px;font-weight:400;color:var(--soft)}
 .pager{display:flex;align-items:center;gap:2px}
-.pager button{
-  width:27px;height:27px;border-radius:8px;display:grid;place-items:center;
-  color:var(--blue);font-size:15px;
-}
-.pager button:hover:not(:disabled){background:var(--tint)}
-.pager button:disabled{color:var(--hair);cursor:default}
-.pager span{font-size:12.5px;color:var(--soft);min-width:34px;text-align:center}
-
-#nums{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;flex:1;align-content:center}
-.num{
-  aspect-ratio:1;border-radius:10px;
-  background:var(--tint);border:1px solid transparent;
+.pager button{width:27px;height:27px;border-radius:8px;display:grid;place-items:center;color:var(--blue);font-size:15px}
+.pager button:disabled{color:var(--hair)}
+.pager span{font-size:12px;color:var(--soft);min-width:34px;text-align:center}
+#nums{display:grid;grid-template-columns:repeat(5, minmax(0,1fr));gap:7px;flex:none}
+.num{aspect-ratio:1;border-radius:10px;background:var(--tint);border:1px solid transparent;
   font-family:'IBM Plex Mono',monospace;font-size:14px;font-variant-numeric:tabular-nums;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-  transition:border-color .12s ease;
-}
-.num:hover{border-color:var(--rule)}
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .num:active{transform:scale(.94)}
-.num small{font-size:9px;font-weight:400;color:var(--blue);font-family:'IBM Plex Mono',monospace}
+.num small{font-size:9px;color:var(--blue);font-family:'IBM Plex Mono',monospace}
 .num.done{background:var(--white);border-color:var(--blue);color:var(--blue)}
-
+.num.next{background:var(--blue);color:#fff;font-weight:500}
+.num.lk{background:transparent;border:1px dashed var(--hair);color:var(--soft);opacity:.4}
 .acts{display:flex;gap:8px;margin-top:14px;flex:none}
-.btn{
-  flex:1;padding:12px;border-radius:11px;font-size:14px;font-weight:400;
-  background:var(--blue);color:#fff;
-}
+.btn{flex:1;padding:12px;border-radius:11px;font-size:14px;background:var(--blue);color:#fff}
 .btn.alt{background:var(--tint);color:var(--ink)}
 .btn:active{transform:scale(.98)}
 
-/* ─────────── กระดาน ─────────── */
+/* ── กระดาน ── */
 .clock{display:flex;align-items:center;gap:8px;flex:none}
 #time{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-#pauseB{width:34px;height:34px;border-radius:10px;background:var(--white);border:1px solid var(--edge);display:grid;place-items:center;font-size:11px;color:var(--soft)}
-
-#boardWrap{
-  flex:1; min-height:0;                     /* กินพื้นที่ที่เหลือทั้งหมด */
-  display:grid; place-items:center;         /* กระดานอยู่กึ่งกลางแนวตั้ง */
-}
-#board{
-  display:grid;grid-template-columns:repeat(9,1fr);aspect-ratio:1;
-  border:2px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--white);
-}
-.cell{
-  position:relative;display:grid;place-items:center;cursor:pointer;
+#pauseB{width:34px;height:34px;border-radius:10px;background:var(--white);border:1px solid var(--edge);
+  display:grid;place-items:center;font-size:11px;color:var(--soft)}
+#lives{font-size:11.5px;color:var(--bad);font-weight:400}
+#chal{display:flex;gap:6px;flex:none;justify-content:center;flex-wrap:wrap}
+.chip{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;
+  font-size:11px;font-weight:300;background:var(--white);border:1px solid var(--edge);color:var(--soft)}
+.chip.ok{border-color:var(--blue);color:var(--blue)}
+.chip.no{opacity:.42;text-decoration:line-through}
+#boardWrap{flex:1;min-height:0;display:grid;place-items:center}
+#board{display:grid;aspect-ratio:1;
+  grid-template-columns:repeat(9, minmax(0, 1fr));
+  grid-template-rows:repeat(9, minmax(0, 1fr));
+  border:2px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--white)}
+.cell{position:relative;display:grid;place-items:center;cursor:pointer;
+  min-width:0;min-height:0;overflow:hidden;
   font-family:'IBM Plex Mono',monospace;font-size:calc(var(--cell,34px) * .56);
   font-variant-numeric:tabular-nums;line-height:1;color:var(--ink);
-  border-right:1px solid var(--hair);
-  border-bottom:1px solid var(--hair);
-  transition:background-color .08s linear;
-}
+  border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  transition:background-color .08s linear}
 .cell.c8{border-right:0}
 .cell.r8{border-bottom:0}
 .cell.c2,.cell.c5{border-right:2px solid var(--rule)}
@@ -165,135 +159,204 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .cell.bad{color:var(--bad);background:var(--bad-bg)}
 .cell.flash{animation:pop .3s ease}
 @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.15)}100%{transform:scale(1)}}
-.notes{
-  position:absolute;inset:1px;display:grid;
-  grid-template:repeat(3,1fr)/repeat(3,1fr);
-  font-size:calc(var(--cell,34px) * .27);color:var(--soft);
-}
+.notes{position:absolute;inset:1px;display:grid;
+  grid-template:repeat(3, minmax(0,1fr)) / repeat(3, minmax(0,1fr));
+  font-size:calc(var(--cell,34px) * .27);color:var(--soft)}
 .notes b{display:grid;place-items:center;font-weight:400}
 
-/* ─────────── แผงตัวเลข ─────────── */
-#pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;flex:none}
-#tools{flex:none}
-.key{
-  position:relative;
-  background:var(--white);border:1px solid var(--edge);border-radius:12px;
-  height:clamp(56px, 8.6dvh, 86px);
-  display:grid;place-items:center;
-}
-.key:hover{border-color:var(--rule)}
+/* ── แผงตัวเลข + เครื่องมือ ── */
+#pad{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:6px;flex:none}
+.key{position:relative;min-width:0;background:var(--white);border:1px solid var(--edge);border-radius:12px;
+  height:clamp(54px, 8.2dvh, 82px);display:grid;place-items:center}
 .key:active{transform:scale(.93)}
-.key b{font-family:'IBM Plex Mono',monospace;font-size:clamp(24px,4.2dvh,34px);font-weight:500;line-height:1;color:var(--blue)}
-.key i{position:absolute;right:10px;bottom:7px;font-style:normal;font-size:11px;
-  color:var(--soft);font-family:'IBM Plex Mono',monospace}
+.key b{font-family:'IBM Plex Mono',monospace;font-size:clamp(23px,4dvh,32px);font-weight:500;line-height:1;color:var(--blue)}
+.key i{position:absolute;right:10px;bottom:6px;font-style:normal;font-size:11px;color:var(--soft);
+  font-family:'IBM Plex Mono',monospace}
 .key.spent{background:var(--bg);border-color:transparent}
 .key.spent b{color:var(--hair)}
 .key.spent i{visibility:hidden}
-
-#tools{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-.tool{
-  background:var(--white);border:1px solid var(--edge);border-radius:11px;
-  height:clamp(48px, 6.6dvh, 64px);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  font-size:11px;font-weight:300;color:var(--soft);
-}
-.tool svg{width:18px;height:18px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#tools{display:grid;grid-template-columns:repeat(6, minmax(0,1fr));gap:5px;flex:none}
+.tool{position:relative;min-width:0;overflow:hidden;background:var(--white);border:1px solid var(--edge);border-radius:11px;
+  height:clamp(46px, 6.4dvh, 62px);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;font-size:9.5px;font-weight:300;color:var(--soft)}
+.tool svg{width:17px;height:17px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .tool:active{transform:scale(.95)}
 .tool.on{background:var(--blue);border-color:var(--blue)}
 .tool.on svg{stroke:#fff}
 .tool.on span{color:#fff}
+.tool:disabled{opacity:.35}
+.bdg{position:absolute;top:4px;right:8px;font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;font-weight:500;color:var(--blue);line-height:1;font-style:normal}
+.tool:disabled .bdg{color:var(--soft)}
 
-/* ─────────── เลเยอร์ทับ ─────────── */
-.veil{
-  position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:16px;padding:28px;text-align:center;
-  background:rgba(242,247,252,.93);backdrop-filter:blur(8px);
-}
+/* ── สถิติ ── */
+.statgrid{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:8px;flex:none}
+.stat{background:var(--white);border:1px solid var(--edge);border-radius:13px;padding:13px 10px;text-align:center}
+.stat b{display:block;font-family:'IBM Plex Mono',monospace;font-size:21px;font-weight:500;line-height:1.2}
+.stat span{display:block;font-size:10.5px;font-weight:300;color:var(--soft);margin-top:3px}
+.trow{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;
+  padding:11px 14px;border-bottom:1px solid var(--edge);font-size:13px}
+.trow:last-child{border-bottom:0}
+.trow.hdr{font-size:10.5px;font-weight:300;color:var(--soft);padding:9px 14px}
+.trow.plain{grid-template-columns:1fr auto}
+.trow em{font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:12.5px;min-width:52px;text-align:right}
+
+/* ── ตั้งค่า ── */
+.srow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  padding:13px 15px;border-bottom:1px solid var(--edge);text-align:left;width:100%}
+.srow:last-child{border-bottom:0}
+.srow b{font-size:14px;font-weight:400;display:block}
+.srow span{font-size:11.5px;font-weight:300;color:var(--soft);display:block;margin-top:2px;line-height:1.5}
+.sw{width:44px;height:26px;border-radius:13px;background:var(--hair);position:relative;flex:none;transition:background .15s ease}
+.sw::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;
+  background:#fff;transition:transform .15s ease;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw.on{background:var(--blue)}
+.sw.on::after{transform:translateX(18px)}
+.danger{color:var(--bad)}
+
+/* ── เลเยอร์ทับ ── */
+.veil{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:16px;padding:28px;text-align:center;
+  background:color-mix(in srgb, var(--bg) 93%, transparent);backdrop-filter:blur(8px)}
 .veil h2{font-size:22px;font-weight:500}
 .veil p{font-size:13.5px;font-weight:300;color:var(--soft);max-width:31ch;line-height:1.8}
 .bigtime{font-family:'IBM Plex Mono',monospace;font-size:46px;font-weight:500;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
 .tagline{font-size:13px;color:var(--blue)}
-.veil .acts{width:100%;max-width:290px;margin-top:2px}
+.rewards{font-size:12.5px;font-weight:300;color:var(--soft);line-height:1.9;max-width:33ch}
+.rewards b{color:var(--blue);font-weight:500}
+.veil .acts{width:100%;max-width:290px}
 .spin{width:30px;height:30px;border:2px solid var(--hair);border-top-color:var(--blue);border-radius:50%;animation:sp .8s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
+/* จอเตี้ย (iPhone SE และรุ่นเล็ก) บีบส่วนประกอบรอบข้างเพื่อคืนพื้นที่ให้กระดาน */
+@media (max-height: 720px){
+  #app > section{gap:9px}
+  #chal{gap:4px}
+  .chip{padding:3px 8px;font-size:10px}
+  .key{height:clamp(50px, 8.2dvh, 82px)}
+  .tool{height:clamp(43px, 6.4dvh, 62px);font-size:9px}
+  .head{padding:8px 2px 0}
+  .head h1{font-size:22px}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ═══ หน้าแรก ═══ -->
-  <section id="vHome">
-    <div class="head">
+<!-- ═══════ หน้าแรก ═══════ -->
+<section id="vHome">
+  <div class="head">
+    <div>
       <h1>ซูโดกุ</h1>
-      <p>1000 แบบฝึก · ห้าระดับ · ปลดล็อกไปทีละขั้น</p>
+      <p>1000 แบบฝึก · ห้าระดับ</p>
     </div>
-    <div class="tiers" id="tiers"></div>
-    <p class="note" id="homeNote"></p>
-    <button class="wipe" id="bWipe">ล้างสถิติทั้งหมด</button>
-  </section>
+    <div class="headbtns">
+      <button class="ibtn" id="bStats" aria-label="สถิติ">
+        <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></button>
+      <button class="ibtn" id="bSet" aria-label="ตั้งค่า">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.9 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 4 13.9H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 4.6V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1.3z"/></svg></button>
+    </div>
+  </div>
 
-  <!-- ═══ เลือกข้อ ═══ -->
-  <section id="vPick" class="hide">
-    <div class="topbar">
-      <div class="topleft">
-        <button class="back" id="pickBack" aria-label="ย้อนกลับ">‹</button>
-        <div>
-          <div class="top-h" id="pickName">ปานกลาง</div>
-          <div class="top-s" id="pickSub">ผ่านแล้ว 0 จาก 200 ข้อ</div>
-        </div>
-      </div>
-    </div>
-    <div class="card pick-body">
-      <div class="pick-head">
-        <h2 id="rangeLbl">ข้อ 1–25</h2>
-        <div class="pager">
-          <button id="pgPrev" aria-label="หน้าก่อนหน้า">‹</button>
-          <span id="pgLbl" class="mono">1 / 8</span>
-          <button id="pgNext" aria-label="หน้าถัดไป">›</button>
-        </div>
-      </div>
-      <div id="nums"></div>
-      <div class="acts">
-        <button class="btn" id="bContinue">เล่นข้อถัดไป</button>
-        <button class="btn alt" id="bRandom">สุ่ม</button>
-      </div>
-    </div>
-    <p class="note" id="pickNote"></p>
-  </section>
+  <button class="banner accent hide" id="bResumeCard">
+    <span class="dot"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg></span>
+    <span><span class="b-name" id="rcName">เล่นต่อ</span><span class="b-sub" id="rcSub"></span></span>
+    <span class="b-go">›</span>
+  </button>
 
-  <!-- ═══ เกม ═══ -->
-  <section id="vGame" class="hide">
-    <div class="topbar">
-      <div class="topleft">
-        <button class="back" id="gameBack" aria-label="ย้อนกลับ">‹</button>
-        <div>
-          <div class="top-h" id="gName">ปานกลาง · ข้อ 1</div>
-          <div class="top-s" id="gSub">ตัวเลขเริ่มต้น 26 ช่อง</div>
-        </div>
-      </div>
-      <div class="clock">
-        <div id="time" class="mono">0:00</div>
-        <button id="pauseB" aria-label="พักเกม">❚❚</button>
+  <button class="banner" id="bDailyCard">
+    <span class="dot"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
+    <span><span class="b-name" id="dcName">โจทย์ประจำวัน</span><span class="b-sub" id="dcSub"></span></span>
+    <span class="b-go">›</span>
+  </button>
+
+  <div class="tiers" id="tiers"></div>
+  <p class="note" id="homeNote"></p>
+</section>
+
+<!-- ═══════ เลือกข้อ ═══════ -->
+<section id="vPick" class="hide">
+  <div class="topbar">
+    <div class="topleft">
+      <button class="back" id="pickBack" aria-label="ย้อนกลับ">‹</button>
+      <div><div class="top-h" id="pickName">ปานกลาง</div><div class="top-s" id="pickSub"></div></div>
+    </div>
+  </div>
+  <div class="card pick-body">
+    <div class="pick-head">
+      <h2 id="rangeLbl">ข้อ 1–25</h2>
+      <div class="pager">
+        <button id="pgPrev" aria-label="หน้าก่อน">‹</button>
+        <span id="pgLbl" class="mono">1 / 8</span>
+        <button id="pgNext" aria-label="หน้าถัดไป">›</button>
       </div>
     </div>
-    <div id="boardWrap"><div id="board"></div></div>
-    <div id="pad"></div>
-    <div id="tools">
-      <button class="tool" id="tUndo">
-        <svg viewBox="0 0 24 24"><path d="M4 10h10a5 5 0 0 1 0 10H9"/><path d="M8 6l-4 4 4 4"/></svg>
-        <span>ย้อนกลับ</span></button>
-      <button class="tool" id="tErase">
-        <svg viewBox="0 0 24 24"><path d="M8 20H5l-2-3 9-11 6 5-8 9z"/><path d="M13 20h7"/></svg>
-        <span>ลบ</span></button>
-      <button class="tool" id="tNote">
-        <svg viewBox="0 0 24 24"><path d="M4 18l1-4L16 3l5 5L10 19l-4 1z"/><path d="M14 5l5 5"/></svg>
-        <span>จดเลข</span></button>
-      <button class="tool" id="tHint">
-        <svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5V15h8v-1.5A6 6 0 0 0 12 3z"/></svg>
-        <span id="hintN">ใบ้ 0</span></button>
+    <div id="nums"></div>
+    <div class="acts">
+      <button class="btn" id="bContinue">เล่นข้อถัดไป</button>
     </div>
-  </section>
+  </div>
+  <p class="note" id="pickNote"></p>
+</section>
+
+<!-- ═══════ สถิติ ═══════ -->
+<section id="vStats" class="hide">
+  <div class="topbar">
+    <div class="topleft">
+      <button class="back" id="statsBack" aria-label="ย้อนกลับ">‹</button>
+      <div><div class="top-h">สถิติ</div><div class="top-s" id="statsSub"></div></div>
+    </div>
+  </div>
+  <div class="statgrid" id="statTop"></div>
+  <div class="card" id="statTable"></div>
+  <p class="note">เวลาที่บันทึกคือเวลาที่ดีที่สุดของแต่ละข้อ</p>
+</section>
+
+<!-- ═══════ ตั้งค่า ═══════ -->
+<section id="vSet" class="hide">
+  <div class="topbar">
+    <div class="topleft">
+      <button class="back" id="setBack" aria-label="ย้อนกลับ">‹</button>
+      <div><div class="top-h">ตั้งค่า</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <button class="srow" id="swNight"><span><b>โหมดกลางคืน</b><span>พื้นหลังเข้ม สบายตาเวลาเล่นก่อนนอน</span></span><span class="sw"></span></button>
+    <button class="srow" id="swSound"><span><b>เสียง</b><span>เสียงสั้นตอนลงเลข ลงผิด และเล่นจบ</span></span><span class="sw"></span></button>
+    <button class="srow" id="swCheck"><span><b>ตรวจผิดทันที</b><span>ปิดไว้ถ้าอยากหาที่ผิดเอง เลขผิดจะไม่ขึ้นสีแดง</span></span><span class="sw"></span></button>
+    <button class="srow" id="swStrict"><span><b>โหมดเข้มงวด</b><span>ลงผิดเกินเป้าภารกิจของระดับนั้นถือว่าแพ้ ต้องเริ่มข้อใหม่</span></span><span class="sw"></span></button>
+  </div>
+  <div class="card">
+    <button class="srow" id="bWipe"><span><b class="danger">ล้างสถิติทั้งหมด</b><span>ความคืบหน้าและการปลดล็อกจะกลับไปเริ่มใหม่</span></span><span>›</span></button>
+  </div>
+  <p class="note">ข้อมูลทั้งหมดเก็บอยู่ในเครื่องนี้เท่านั้น ไม่ได้ส่งไปที่ไหน</p>
+</section>
+
+<!-- ═══════ เกม ═══════ -->
+<section id="vGame" class="hide">
+  <div class="topbar">
+    <div class="topleft">
+      <button class="back" id="gameBack" aria-label="ย้อนกลับ">‹</button>
+      <div><div class="top-h" id="gName"></div><div class="top-s" id="gSub"></div></div>
+    </div>
+    <div class="clock">
+      <div id="lives" class="hide"></div>
+      <div id="time" class="mono">0:00</div>
+      <button id="pauseB" aria-label="พักเกม">❚❚</button>
+    </div>
+  </div>
+  <div id="chal" class="hide"></div>
+  <div id="boardWrap"><div id="board"></div></div>
+  <div id="pad"></div>
+  <div id="tools">
+    <button class="tool" id="tUndo"><svg viewBox="0 0 24 24"><path d="M4 10h10a5 5 0 0 1 0 10H9"/><path d="M8 6l-4 4 4 4"/></svg><span>ย้อน</span></button>
+    <button class="tool" id="tRedo"><svg viewBox="0 0 24 24"><path d="M20 10H10a5 5 0 0 0 0 10h5"/><path d="M16 6l4 4-4 4"/></svg><span>ซ้ำ</span></button>
+    <button class="tool" id="tErase"><svg viewBox="0 0 24 24"><path d="M8 20H5l-2-3 9-11 6 5-8 9z"/><path d="M13 20h7"/></svg><span>ลบ</span></button>
+    <button class="tool" id="tNote"><svg viewBox="0 0 24 24"><path d="M4 18l1-4L16 3l5 5L10 19l-4 1z"/><path d="M14 5l5 5"/></svg><span>จด</span></button>
+    <button class="tool" id="tFill"><svg viewBox="0 0 24 24"><path d="M4 7h7M4 12h7M4 17h7"/><path d="M15 12l3 3 5-6"/></svg><span>เติมจด</span></button>
+    <button class="tool" id="tHint"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5V15h8v-1.5A6 6 0 0 0 12 3z"/></svg><span id="hintN">ใบ้</span><i class="bdg" id="hintBdg">0</i></button>
+  </div>
+</section>
 </div>
 
 <div class="veil hide" id="vLoad"><div class="spin"></div><p id="loadMsg">กำลังสร้างโจทย์</p></div>
@@ -302,26 +365,28 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
   <h2>พักไว้ก่อน</h2>
   <div class="bigtime" id="pTime">0:00</div>
   <p>นาฬิกาหยุดแล้ว กระดานถูกซ่อนไว้กันแอบคิดต่อ</p>
-  <div class="acts">
-    <button class="btn" id="bResume">เล่นต่อ</button>
-    <button class="btn alt" id="bQuit">ออก</button>
-  </div>
+  <div class="acts"><button class="btn" id="bResume">เล่นต่อ</button><button class="btn alt" id="bQuit">ออก</button></div>
+</div>
+
+<div class="veil hide" id="vLose">
+  <h2 id="loseHead">ลงผิดเกินกำหนด</h2>
+  <p id="loseMsg"></p>
+  <div class="acts"><button class="btn" id="bRetry">เริ่มข้อนี้ใหม่</button><button class="btn alt" id="bLoseOut">ออก</button></div>
 </div>
 
 <div class="veil hide" id="vWin">
   <h2 id="wHead">เสร็จแล้ว</h2>
   <div class="bigtime" id="wTime">0:00</div>
   <p id="wStats"></p>
+  <div class="rewards hide" id="wRw"></div>
   <div class="tagline hide" id="wTag"></div>
-  <div class="acts">
-    <button class="btn" id="bNextP">ข้อถัดไป</button>
-    <button class="btn alt" id="bBackList">เลือกข้อ</button>
-  </div>
+  <div class="acts"><button class="btn" id="bNextP">ข้อถัดไป</button><button class="btn alt" id="bBackList">ออก</button></div>
 </div>
 
 <script>
 (() => {
 'use strict';
+
 
 
 /* ==================================================================
@@ -616,20 +681,42 @@ function generate(tierIdx, num){
 
 
 
-/* ==================================================================
-   7. โครงหลักสูตร — ปลดล็อกทีละระดับ
-   ================================================================== */
-const PER_TIER  = 200;   // ข้อต่อระดับ  (5 ระดับ × 200 = 1000 แบบฝึก)
-const PER_PAGE  = 25;    // ข้อต่อหน้า
-const PAGES     = Math.ceil(PER_TIER / PER_PAGE);   // = 8 หน้า
-const UNLOCK    = 10;    // ต้องผ่านกี่ข้อของระดับก่อนหน้า จึงจะเปิดระดับถัดไป
+
 
 /* ==================================================================
-   8. บันทึกความคืบหน้า
+   7. โครงหลักสูตร
    ================================================================== */
-const save = {best: {}, hintsTotal: 0};
-const KEY = 'sudoku1000v2';
-/* ไล่หาที่เก็บตามลำดับ: window.storage (หน้าตัวอย่าง) → localStorage (แอปจริง) → หน่วยความจำ */
+const PER_TIER = 200, PER_PAGE = 25;
+const PAGES = Math.ceil(PER_TIER / PER_PAGE);
+const UNLOCK = 10;
+/* ภารกิจของแต่ละข้อ: เวลาเป้าหมาย (วินาที) และจำนวนครั้งที่ลงผิดได้
+   ทำสำเร็จข้อละ +1 ตัวช่วย และครบทุก 5 ข้อในระดับนั้นได้โบนัสอีก +2 */
+const CHAL = [
+  {sec:  360, miss: 1},   // มือใหม่    6 นาที
+  {sec:  540, miss: 2},   // ง่าย       9 นาที
+  {sec:  840, miss: 3},   // ปานกลาง   14 นาที
+  {sec: 1320, miss: 4},   // ยาก       22 นาที
+  {sec: 2100, miss: 5}    // มาสเตอร์  35 นาที
+];
+const MILESTONE = 5, MILESTONE_REWARD = 2, START_ITEMS = 3, MAX_ITEMS = 9;
+/* โหมดเข้มงวด: ลงผิดเกินเป้าภารกิจของระดับนั้นเมื่อไหร่ถือว่าแพ้
+   ผูกกับ CHAL เพื่อไม่ให้ขัดกับตัวเลขที่แสดงบนแถบภารกิจ */
+const strictCap = t => CHAL[t].miss + 1;
+const TECH = ['เห็นช่องเดียวตรงๆ' ,'เลขลงได้ที่เดียวในหน่วย','ตัดตัวเลือกข้ามบล็อก',
+              'จับคู่ตัวเลือกเป็นชุด','ตัดแบบสี่เหลี่ยม','ต้องลองผิดลองถูก'];
+
+/* ==================================================================
+   8. ข้อมูลที่บันทึก
+   ================================================================== */
+const KEY = 'sudoku1000v3';
+const save = {
+  best: {},            // 'medium:17' → เวลาที่ดีที่สุด (ms)
+  daily: {},           // '2026-09-13' → เวลาที่ทำได้
+  days: [],            // วันที่ที่เล่นจบอย่างน้อยหนึ่งข้อ
+  hintsTotal: 0, items: START_ITEMS, topUp: null,
+  wip: null,           // เกมที่เล่นค้างไว้
+  night: 0, sound: 1, check: 1, strict: 0
+};
 const storage = {
   async load(){
     try{
@@ -648,15 +735,69 @@ const storage = {
     if(!ok){ try{ window.localStorage.setItem(KEY, json); }catch(e){} }
   }
 };
-const bestKey   = (t, n) => TIERS[t].key + ':' + n;
+const bestKey = (t, n) => TIERS[t].key + ':' + n;
 const doneCount = t => Object.keys(save.best).filter(k => k.startsWith(TIERS[t].key + ':')).length;
-const isOpen    = t => t === 0 || doneCount(t - 1) >= UNLOCK;
-const topOpen   = () => { let t = 0; while(t < 4 && isOpen(t + 1)) t++; return t; };
+const isOpen = t => t === 0 || doneCount(t - 1) >= UNLOCK;
+/* ข้อ n เล่นได้ก็ต่อเมื่อผ่านข้อ n-1 มาแล้ว ข้อ 1 เปิดเสมอ */
+const puzzleOpen = (t, n) => n === 1 || save.best[bestKey(t, n - 1)] !== undefined;
+const topOpen = () => { let t = 0; while(t < 4 && isOpen(t + 1)) t++; return t; };
 
 /* ==================================================================
-   9. สถานะและการสลับหน้าจอ
+   9. เสียง (สร้างจาก Web Audio ไม่ต้องใช้ไฟล์)
+   ================================================================== */
+let actx = null;
+function tone(freq, dur, type, vol){
+  if(!save.sound) return;
+  try{
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if(actx.state === 'suspended') actx.resume();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = type || 'sine';
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(vol || .05, actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.0001, actx.currentTime + dur);
+    o.connect(g); g.connect(actx.destination);
+    o.start(); o.stop(actx.currentTime + dur);
+  }catch(e){}
+}
+const sfx = {
+  place: () => tone(720, .07, 'sine', .05),
+  note:  () => tone(480, .05, 'sine', .035),
+  erase: () => tone(300, .06, 'sine', .04),
+  wrong: () => tone(150, .25, 'square', .045),
+  hint:  () => tone(880, .10, 'triangle', .04),
+  win:   () => [0, 140, 280, 460].forEach((d, i) =>
+           setTimeout(() => tone([523, 659, 784, 1046][i], .3, 'sine', .05), d)),
+  lose:  () => [0, 160].forEach((d, i) =>
+           setTimeout(() => tone([300, 200][i], .35, 'sawtooth', .04), d))
+};
+
+/* ==================================================================
+   10. วันที่ / โจทย์ประจำวัน
+   ================================================================== */
+function dayKey(d){
+  d = d || new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function dayNumber(key){
+  const [y, m, d] = key.split('-').map(Number);
+  return Math.floor(Date.UTC(y, m - 1, d) / 86400000);
+}
+/* ระดับหมุนตามวันในสัปดาห์ อาทิตย์ง่ายสุด เสาร์ยากสุด */
+const DAILY_TIER = [1, 1, 2, 2, 2, 3, 4];
+function dailyInfo(key){
+  key = key || dayKey();
+  const wd = new Date(key + 'T00:00:00').getDay();
+  return {key, tier: DAILY_TIER[wd], num: 10000 + dayNumber(key)};
+}
+
+/* ==================================================================
+   11. หน้าจอ
    ================================================================== */
 const $ = id => document.getElementById(id);
+const views = {home: $('vHome'), pick: $('vPick'), game: $('vGame'), stats: $('vStats'), set: $('vSet')};
+function view(name){ for(const k in views) views[k].classList.toggle('hide', k !== name); }
+function veil(id, on){ $(id).classList.toggle('hide', !on); }
 const buzz = p => { try{ navigator.vibrate && navigator.vibrate(p); }catch(e){} };
 
 let wake = null;
@@ -669,10 +810,6 @@ async function keepAwake(on){
   }catch(e){ wake = null; }
 }
 
-const views = {home: $('vHome'), pick: $('vPick'), game: $('vGame')};
-function view(name){ for(const k in views) views[k].classList.toggle('hide', k !== name); }
-function veil(id, on){ $(id).classList.toggle('hide', !on); }
-
 let tierIdx = 0, page = 0, G = null;
 
 function fmt(ms){
@@ -681,9 +818,36 @@ function fmt(ms){
   return h ? `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`
            : `${m}:${String(sec).padStart(2,'0')}`;
 }
+function applyNight(){
+  document.documentElement.dataset.night = save.night ? '1' : '0';
+  $('metaTheme').content = save.night ? '#0f1621' : '#f2f7fc';
+}
 
-/* ---------- หน้าแรก ---------- */
+/* ==================================================================
+   12. หน้าแรก
+   ================================================================== */
 function drawHome(){
+  // การ์ดเล่นต่อ
+  const w = save.wip;
+  $('bResumeCard').classList.toggle('hide', !w);
+  if(w){
+    const label = w.daily ? 'โจทย์ประจำวัน' : `${TIERS[w.t].name} ข้อ ${w.n}`;
+    const filled = w.b.split('').filter(c => c !== '0').length;
+    $('rcName').textContent = 'เล่นต่อ · ' + label;
+    $('rcSub').textContent = `เติมไปแล้ว ${filled} จาก 81 ช่อง · ${fmt(w.ms)}`;
+  }
+
+  // การ์ดโจทย์ประจำวัน
+  const d = dailyInfo();
+  const doneMs = save.daily[d.key];
+  const today = new Date(d.key + 'T00:00:00');
+  const thDay = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'][today.getDay()];
+  $('dcName').textContent = doneMs ? 'โจทย์ประจำวัน · ทำแล้ว' : 'โจทย์ประจำวัน';
+  $('dcSub').textContent = doneMs
+    ? `วัน${thDay} · ระดับ${TIERS[d.tier].name} · ทำได้ ${fmt(doneMs)}`
+    : `วัน${thDay} · ระดับ${TIERS[d.tier].name} · ทุกคนได้โจทย์เดียวกัน`;
+
+  // รายการระดับ
   const wrap = $('tiers');
   wrap.innerHTML = '';
   TIERS.forEach((t, idx) => {
@@ -694,7 +858,7 @@ function drawHome(){
       `<i class="step${k <= idx ? ' on' : ''}" style="height:${5 + k * 3.5}px"></i>`).join('');
     const right = open
       ? `<span class="tier-right"><b>${done}</b>/${PER_TIER}</span>`
-      : `<span class="tier-right"><span class="lockmark">✦</span><br>${doneCount(idx-1)}/${UNLOCK}</span>`;
+      : `<span class="tier-right">✦<br>${doneCount(idx - 1)}/${UNLOCK}</span>`;
     const sub = open ? t.sub : `ผ่าน ${TIERS[idx-1].name} ให้ครบ ${UNLOCK} ข้อก่อน`;
     b.innerHTML = `<span class="steps">${steps}</span>
       <span><span class="tier-name">${t.name}</span><span class="tier-sub">${sub}</span></span>${right}`;
@@ -702,13 +866,16 @@ function drawHome(){
     else b.disabled = true;
     wrap.appendChild(b);
   });
+
   const all = TIERS.reduce((s, _, i) => s + doneCount(i), 0);
   $('homeNote').textContent = all
-    ? `ผ่านแล้ว ${all} จาก 1000 ข้อ · ใช้ตัวช่วยไป ${save.hintsTotal} ครั้ง`
+    ? `ผ่านแล้ว ${all} จาก 1000 ข้อ · เล่นติดกัน ${streak().cur} วัน · ตัวช่วย ${save.items} ชิ้น`
     : `ทุกข้อมีคำตอบเดียวเสมอ · ผ่าน ${UNLOCK} ข้อในระดับหนึ่ง เพื่อเปิดระดับถัดไป`;
 }
 
-/* ---------- เลือกข้อ ---------- */
+/* ==================================================================
+   13. เลือกข้อ
+   ================================================================== */
 function openPick(idx){
   if(!isOpen(idx)) return;
   tierIdx = idx;
@@ -720,57 +887,113 @@ function openPick(idx){
 function drawNums(){
   const done = doneCount(tierIdx);
   $('pickSub').textContent = `ผ่านแล้ว ${done} จาก ${PER_TIER} ข้อ`;
-  const start = page * PER_PAGE + 1;
-  const end = Math.min(start + PER_PAGE - 1, PER_TIER);
+  const start = page * PER_PAGE + 1, end = Math.min(start + PER_PAGE - 1, PER_TIER);
   $('rangeLbl').textContent = `ข้อ ${start}–${end}`;
   $('pgLbl').textContent = `${page + 1} / ${PAGES}`;
   $('pgPrev').disabled = page === 0;
   $('pgNext').disabled = page >= PAGES - 1;
-
   const box = $('nums');
   box.innerHTML = '';
   for(let n = start; n <= end; n++){
     const b = document.createElement('button');
     b.className = 'num';
     const rec = save.best[bestKey(tierIdx, n)];
-    b.innerHTML = rec ? `${n}<small>${fmt(rec)}</small>` : `${n}`;
-    if(rec) b.classList.add('done');
-    b.onclick = () => startGame(tierIdx, n);
+    const open = puzzleOpen(tierIdx, n);
+    if(rec !== undefined){ b.innerHTML = `${n}<small>${fmt(rec)}</small>`; b.classList.add('done'); }
+    else if(open){ b.innerHTML = `${n}`; b.classList.add('next'); }
+    else { b.innerHTML = `${n}`; b.classList.add('lk'); b.disabled = true;
+           b.setAttribute('aria-label', `ข้อ ${n} ยังไม่ปลดล็อก`); }
+    if(open) b.onclick = () => startGame(tierIdx, n);
     box.appendChild(b);
   }
-
+  const nextP = firstUnsolved();
   const next = tierIdx + 1;
+  $('bContinue').textContent = done >= PER_TIER ? 'เล่นซ้ำข้อ 1' : `เล่นข้อ ${nextP}`;
   $('pickNote').textContent = next < 5
-    ? (isOpen(next) ? `ระดับ ${TIERS[next].name} เปิดแล้ว`
-                    : `อีก ${UNLOCK - done} ข้อ จะเปิดระดับ ${TIERS[next].name}`)
+    ? (isOpen(next) ? `ระดับ ${TIERS[next].name} เปิดแล้ว` : `อีก ${UNLOCK - done} ข้อ จะเปิดระดับ ${TIERS[next].name}`)
     : 'ระดับสูงสุดแล้ว';
 }
 function firstUnsolved(){
-  for(let n = 1; n <= PER_TIER; n++) if(!save.best[bestKey(tierIdx, n)]) return n;
+  for(let n = 1; n <= PER_TIER; n++) if(save.best[bestKey(tierIdx, n)] === undefined) return n;
   return 1;
 }
 
-/* ---------- เริ่มเกม ---------- */
-function startGame(t, n){
+/* ==================================================================
+   14. สถิติ
+   ================================================================== */
+function streak(){
+  const set = new Set(save.days || []);
+  let cur = 0;
+  const d = new Date();
+  if(!set.has(dayKey(d))) d.setDate(d.getDate() - 1);   // ยังไม่เล่นวันนี้ก็นับจากเมื่อวาน
+  while(set.has(dayKey(d))){ cur++; d.setDate(d.getDate() - 1); }
+  let best = 0, run = 0, prev = null;
+  [...set].sort().forEach(k => {
+    run = (prev !== null && dayNumber(k) - dayNumber(prev) === 1) ? run + 1 : 1;
+    prev = k; if(run > best) best = run;
+  });
+  return {cur, best};
+}
+function drawStats(){
+  const times = Object.values(save.best);
+  const total = times.length;
+  const st = streak();
+  $('statsSub').textContent = `ผ่านแล้ว ${total} จาก 1000 ข้อ`;
+  $('statTop').innerHTML = `
+    <div class="stat"><b>${total}</b><span>ข้อที่ผ่าน</span></div>
+    <div class="stat"><b>${st.cur}</b><span>เล่นติดกัน (วัน)</span></div>
+    <div class="stat"><b>${save.items}</b><span>ตัวช่วยที่มี</span></div>`;
+
+  let html = `<div class="trow hdr"><span>ระดับ</span><em>ผ่าน</em><em>เร็วสุด</em><em>เฉลี่ย</em></div>`;
+  TIERS.forEach((t, i) => {
+    const list = Object.keys(save.best).filter(k => k.startsWith(t.key + ':')).map(k => save.best[k]);
+    const n = list.length;
+    const fast = n ? fmt(Math.min(...list)) : '—';
+    const avg = n ? fmt(list.reduce((a, b) => a + b, 0) / n) : '—';
+    html += `<div class="trow"><span>${t.name}</span><em>${n}/${PER_TIER}</em><em>${fast}</em><em>${avg}</em></div>`;
+  });
+  const dn = Object.keys(save.daily || {}).length;
+  html += `<div class="trow plain"><span>โจทย์ประจำวันที่ทำแล้ว</span><em>${dn} ข้อ</em></div>`;
+  html += `<div class="trow plain"><span>เล่นติดกันสูงสุด</span><em>${st.best} วัน</em></div>`;
+  html += `<div class="trow plain"><span>ใช้ตัวช่วยรวม</span><em>${save.hintsTotal} ครั้ง</em></div>`;
+  $('statTable').innerHTML = html;
+}
+
+/* ==================================================================
+   15. เริ่มเกม / เล่นต่อ
+   ================================================================== */
+function startGame(t, n, opts){
+  opts = opts || {};
   tierIdx = t;
   veil('vLoad', true);
-  $('loadMsg').textContent = `กำลังสร้างโจทย์ ${TIERS[t].name} ข้อ ${n}`;
+  $('loadMsg').textContent = opts.daily ? 'กำลังสร้างโจทย์ประจำวัน'
+                                        : `กำลังสร้างโจทย์ ${TIERS[t].name} ข้อ ${n}`;
   requestAnimationFrame(() => setTimeout(() => {
     const made = generate(t, n);
     G = {
-      tier: t, num: n,
-      puzzle: made.puzzle, solution: made.solution,
+      tier: t, num: n, daily: opts.daily || null,
+      puzzle: made.puzzle, solution: made.solution, level: made.level,
       board: Uint8Array.from(made.puzzle),
       notes: new Int16Array(81),
-      history: [], sel: -1, noteMode: false,
+      undoStack: [], redoStack: [],
+      sel: -1, noteMode: false,
       hints: 0, mistakes: 0,
-      elapsed: 0, running: true, done: false
+      elapsed: 0, running: true, done: false,
+      firstClear: opts.daily ? save.daily[opts.daily] === undefined
+                             : save.best[bestKey(t, n)] === undefined
     };
-    $('gName').textContent = `${TIERS[t].name} · ข้อ ${n}`;
-    $('gSub').textContent = `ตัวเลขเริ่มต้น ${made.givens} ช่อง`;
-    $('time').textContent = '0:00';
-    buildBoard();
-    render();
+    if(opts.restore){
+      const w = opts.restore;
+      for(let i = 0; i < 81; i++) G.board[i] = +w.b[i];
+      w.nt.split(',').forEach((v, i) => { G.notes[i] = +v || 0; });
+      G.elapsed = w.ms; G.hints = w.h; G.mistakes = w.m;
+    }
+    $('gName').textContent = opts.daily ? `ประจำวัน · ${TIERS[t].name}` : `${TIERS[t].name} · ข้อ ${n}`;
+    $('gSub').textContent = `เริ่ม ${made.givens} ช่อง · ${TECH[Math.min(made.level, 5)]}`;
+    $('time').textContent = fmt(G.elapsed);
+    $('lives').classList.toggle('hide', !save.strict);
+    lastSec = -1;
+    buildBoard(); render();
     keepAwake(true);
     veil('vLoad', false);
     view('game');
@@ -778,24 +1001,45 @@ function startGame(t, n){
   }, 16));
 }
 
-/* ---------- ปรับขนาดกระดานให้พอดีกับที่ว่างที่เหลือจริง ----------
-   CSS อย่างเดียวคำนวณกรณีนี้ไม่แน่นอนข้ามเบราว์เซอร์
-   วัดกล่องที่เหลือแล้วสั่งขนาดตรงๆ ชัวร์กว่า                      */
+/* ---------- เก็บเกมที่เล่นค้าง ---------- */
+let wipTimer = null;
+function stashWip(now){
+  if(!G || G.done) return;
+  const doIt = () => {
+    if(!G || G.done) return;
+    save.wip = {
+      t: G.tier, n: G.num, daily: G.daily,
+      b: Array.from(G.board).join(''),
+      nt: Array.from(G.notes).join(','),
+      ms: Math.round(G.elapsed), h: G.hints, m: G.mistakes
+    };
+    storage.put();
+  };
+  clearTimeout(wipTimer);
+  if(now) doIt(); else wipTimer = setTimeout(doIt, 700);
+}
+function clearWip(){
+  clearTimeout(wipTimer);
+  if(save.wip){ save.wip = null; storage.put(); }
+}
+
+/* ==================================================================
+   16. กระดาน
+   ================================================================== */
 function fitBoard(){
   const wrap = $('boardWrap'), b = $('board');
   if(!wrap || !b || !wrap.clientHeight) return;
   const side = Math.floor(Math.min(wrap.clientWidth, wrap.clientHeight));
-  const size = Math.max(200, side - (side % 9));   // หารด้วย 9 ลงตัว เส้นจะได้ไม่เบลอ
+  const size = Math.max(200, side - (side % 9));
   b.style.width = size + 'px';
   b.style.height = size + 'px';
   b.style.setProperty('--cell', (size / 9) + 'px');
 }
 let fitTimer = null;
-function fitSoon(){ clearTimeout(fitTimer); fitTimer = setTimeout(fitBoard, 60); }
+const fitSoon = () => { clearTimeout(fitTimer); fitTimer = setTimeout(fitBoard, 60); };
 window.addEventListener('resize', fitSoon);
 window.addEventListener('orientationchange', fitSoon);
 
-/* ---------- กระดาน ---------- */
 const cells = [];
 function buildBoard(){
   if(cells.length === 81) return;
@@ -824,10 +1068,9 @@ function render(){
     if(i === sel) cls += ' sel';
     if(v){
       cls += given ? ' given' : ' user';
-      if(!given && v !== G.solution[i]) cls += ' bad';
+      if(!given && save.check && v !== G.solution[i]) cls += ' bad';
     }
     el.className = cls;
-
     if(v) el.textContent = v;
     else if(G.notes[i]){
       let h = '<div class="notes">';
@@ -837,127 +1080,271 @@ function render(){
     else el.textContent = '';
   }
   for(let d = 1; d <= 9; d++){
-    let used = 0;
-    for(let i = 0; i < 81; i++) if(G.board[i] === d) used++;
+    const used = countPlaced(d);
     const k = $('key' + d);
     k.classList.toggle('spent', used >= 9);
+    k.disabled = used >= 9;
     k.querySelector('i').textContent = 9 - used;
   }
   $('tNote').classList.toggle('on', G.noteMode);
-  $('hintN').textContent = 'ใบ้ ' + G.hints;
+  $('tFill').disabled = G.tier < FILL_MIN_TIER;
+  $('tUndo').disabled = !G.undoStack.length;
+  $('tRedo').disabled = !G.redoStack.length;
+  $('tHint').disabled = save.items <= 0;
+  $('hintBdg').textContent = save.items;
+  updateChal();
+  if(save.strict) $('lives').textContent = `ผิด ${G.mistakes}/${CHAL[G.tier].miss}`;
 }
 
-/* ---------- ลงเลข ---------- */
-function push(i){
-  G.history.push({i, v: G.board[i], n: G.notes[i]});
-  if(G.history.length > 400) G.history.shift();
+/* ---------- แถบภารกิจ ---------- */
+const chipHTML = (ok, txt) => `<span class="chip ${ok ? 'ok' : 'no'}">${ok ? '◆' : '◇'} ${txt}</span>`;
+function updateChal(){
+  const el = $('chal');
+  if(!G || !G.firstClear){ el.classList.add('hide'); return; }
+  el.classList.remove('hide');
+  const c = CHAL[G.tier];
+  el.innerHTML =
+    chipHTML(G.elapsed <= c.sec * 1000, `ภายใน ${fmt(c.sec * 1000)}`) +
+    chipHTML(G.mistakes <= c.miss, `ผิดไม่เกิน ${c.miss}`) +
+    chipHTML(G.hints === 0, 'ไม่ใช้ตัวช่วย');
+}
+
+/* ==================================================================
+   17. ลงเลข / ย้อน / ทำซ้ำ
+   ================================================================== */
+function snapshot(){
+  return {b: Array.from(G.board), n: Array.from(G.notes), sel: G.sel};
+}
+function pushUndo(){
+  G.undoStack.push(snapshot());
+  if(G.undoStack.length > 300) G.undoStack.shift();
+  G.redoStack.length = 0;
+}
+function restore(s){
+  for(let i = 0; i < 81; i++){ G.board[i] = s.b[i]; G.notes[i] = s.n[i]; }
+  G.sel = s.sel;
 }
 function blink(i){
   cells[i].classList.add('flash');
   setTimeout(() => cells[i] && cells[i].classList.remove('flash'), 320);
 }
+function countPlaced(d){
+  let c = 0;
+  for(let i = 0; i < 81; i++) if(G.board[i] === d) c++;
+  return c;
+}
 function setNum(d){
   if(!G || G.done || !G.running) return;
   const i = G.sel;
   if(i < 0 || G.puzzle[i]) return;
+  /* เลขนี้ลงครบ 9 ตัวแล้ว ห้ามลงเพิ่ม กันกดพลาด
+     (ยังกดซ้ำช่องเดิมเพื่อลบออกได้) */
+  if(countPlaced(d) >= 9 && G.board[i] !== d) return;
   if(G.noteMode){
     if(G.board[i]) return;
-    push(i); G.notes[i] ^= BIT[d];
+    pushUndo(); G.notes[i] ^= BIT[d]; sfx.note();
   }else{
-    if(G.board[i] === d){ push(i); G.board[i] = 0; render(); return; }
-    push(i);
+    if(G.board[i] === d){ pushUndo(); G.board[i] = 0; sfx.erase(); render(); stashWip(); return; }
+    pushUndo();
     G.board[i] = d; G.notes[i] = 0;
-    if(d !== G.solution[i]){ G.mistakes++; buzz(40); }
-    else for(const p of PEERS[i]) G.notes[p] &= ~BIT[d];
+    if(d !== G.solution[i]){
+      G.mistakes++; sfx.wrong(); buzz(40);
+      if(save.strict && G.mistakes >= strictCap(G.tier)){ render(); return loseGame(); }
+    }else{
+      sfx.place();
+      for(const p of PEERS[i]) G.notes[p] &= ~BIT[d];
+    }
+    /* ลงครบ 9 ตัวแล้ว เลขนี้เป็นตัวเลือกที่ไหนไม่ได้อีก ล้างโน้ตทิ้งทั้งกระดาน
+       (ไม่งั้นโน้ตจะค้างและลบผ่านแป้นไม่ได้ เพราะปุ่มถูกล็อกไปแล้ว) */
+    if(countPlaced(d) >= 9) for(let k = 0; k < 81; k++) G.notes[k] &= ~BIT[d];
     blink(i);
   }
-  render(); checkWin();
+  render(); stashWip(); checkWin();
 }
 function erase(){
   if(!G || G.done) return;
   const i = G.sel;
   if(i < 0 || G.puzzle[i]) return;
-  push(i); G.board[i] = 0; G.notes[i] = 0; render();
+  if(!G.board[i] && !G.notes[i]) return;
+  pushUndo(); G.board[i] = 0; G.notes[i] = 0;
+  sfx.erase(); render(); stashWip();
 }
 function undo(){
-  if(!G || G.done || !G.history.length) return;
-  const h = G.history.pop();
-  G.board[h.i] = h.v; G.notes[h.i] = h.n; G.sel = h.i;
-  render();
+  if(!G || G.done || !G.undoStack.length) return;
+  G.redoStack.push(snapshot());
+  restore(G.undoStack.pop());
+  render(); stashWip();
 }
+function redo(){
+  if(!G || G.done || !G.redoStack.length) return;
+  G.undoStack.push(snapshot());
+  restore(G.redoStack.pop());
+  render(); stashWip();
+}
+/* เติมตัวเลือกที่เป็นไปได้ให้ทุกช่องว่างในครั้งเดียว */
+const FILL_MIN_TIER = 3;      /* เปิดใช้ตั้งแต่ระดับ ยาก ขึ้นไป */
+function autoNotes(){
+  if(!G || G.done || !G.running || G.tier < FILL_MIN_TIER) return;
+  pushUndo();
+  const cand = buildCands(G.board);
+  for(let i = 0; i < 81; i++) if(!G.board[i]) G.notes[i] = cand[i];
+  sfx.note(); render(); stashWip();
+}
+
+/* ==================================================================
+   18. ตัวช่วย — เปิดคำตอบให้หนึ่งช่อง
+      ถ้าเลือกช่องไว้จะเปิดช่องนั้น ถ้าไม่ได้เลือกหรือช่องนั้นถูกแล้ว
+      จะสุ่มช่องที่ยังไม่ถูกมาเปิดให้แทน
+   ================================================================== */
 function hint(){
-  if(!G || G.done) return;
+  if(!G || G.done || !G.running) return;
+  if(save.items <= 0) return;              /* ไม่มีไอเทม กดไม่ได้ */
   let i = G.sel;
-  if(i < 0 || G.board[i] === G.solution[i]){
+  if(i < 0 || G.puzzle[i] || G.board[i] === G.solution[i]){
     const open = [];
     for(let k = 0; k < 81; k++) if(G.board[k] !== G.solution[k]) open.push(k);
     if(!open.length) return;
     i = open[(Math.random() * open.length) | 0];
   }
-  push(i);
-  G.board[i] = G.solution[i]; G.notes[i] = 0;
+  pushUndo();
+  G.board[i] = G.solution[i];
+  G.notes[i] = 0;
   for(const p of PEERS[i]) G.notes[p] &= ~BIT[G.board[i]];
-  G.sel = i; G.hints++; save.hintsTotal++;
-  blink(i); render(); checkWin();
+  G.sel = i; G.hints++; save.hintsTotal++; save.items--;
+  sfx.hint(); blink(i); storage.put();
+  render(); stashWip(); checkWin();
+}
+
+/* ==================================================================
+   19. จบเกม
+   ================================================================== */
+function markDay(){
+  const k = dayKey();
+  save.days = save.days || [];
+  if(!save.days.includes(k)){
+    save.days.push(k);
+    if(save.days.length > 400) save.days = save.days.slice(-400);
+  }
+}
+function loseGame(){
+  G.done = true; G.running = false;
+  keepAwake(false); sfx.lose(); buzz([60, 80, 60]);
+  clearWip();
+  $('loseHead').textContent = `ลงผิดเกิน ${CHAL[G.tier].miss} ครั้ง`;
+  $('loseMsg').textContent = `${G.daily ? 'โจทย์ประจำวัน' : TIERS[G.tier].name + ' ข้อ ' + G.num} · ทำไปได้ ${fmt(G.elapsed)}`;
+  setTimeout(() => veil('vLose', true), 300);
 }
 function checkWin(){
   for(let i = 0; i < 81; i++) if(G.board[i] !== G.solution[i]) return;
   G.done = true; G.running = false;
-  keepAwake(false); buzz([40, 70, 40]);
+  keepAwake(false); sfx.win(); buzz([40, 70, 40]);
+  clearWip();
 
   const openedBefore = topOpen();
-  const ms = G.elapsed, key = bestKey(G.tier, G.num), prev = save.best[key];
-  const isBest = !prev || ms < prev;
-  if(isBest) save.best[key] = ms;
+  const ms = G.elapsed;
+  let isBest = false, prev = null;
+  const stamp = Math.max(1, Math.round(ms));       /* 0 จะกลายเป็นค่าเท็จ กันไว้ */
+  if(G.daily){
+    prev = save.daily[G.daily];
+    isBest = prev === undefined || stamp < prev;
+    if(isBest) save.daily[G.daily] = stamp;
+  }else{
+    const key = bestKey(G.tier, G.num);
+    prev = save.best[key];
+    isBest = prev === undefined || stamp < prev;
+    if(isBest) save.best[key] = stamp;
+  }
+  /* ภารกิจ — ให้เฉพาะการผ่านครั้งแรกของข้อนั้น */
+  let gained = 0;
+  const won = [];
+  if(G.firstClear){
+    const c = CHAL[G.tier];
+    if(ms <= c.sec * 1000){ gained++; won.push(`ทำเสร็จภายใน ${fmt(c.sec * 1000)}`); }
+    if(G.mistakes <= c.miss){ gained++; won.push(`ลงผิดไม่เกิน ${c.miss} ครั้ง`); }
+    if(G.hints === 0){ gained++; won.push('ไม่ใช้ตัวช่วยเลย'); }
+    if(!G.daily){
+      const cnt = doneCount(G.tier);
+      if(cnt % MILESTONE === 0){
+        gained += MILESTONE_REWARD;
+        won.push(`ครบ ${cnt} ข้อในระดับ${TIERS[G.tier].name}`);
+      }
+    }
+    const before = save.items;
+    save.items = Math.min(MAX_ITEMS, save.items + gained);
+    gained = save.items - before;              /* ชนเพดานแล้วไม่บวกเกิน */
+  }
+  markDay();
   storage.put();
   const openedAfter = topOpen();
 
   $('wHead').textContent = G.hints ? 'เสร็จแล้ว' : 'เสร็จแบบไม่ใช้ตัวช่วย';
   $('wTime').textContent = fmt(ms);
   $('wStats').textContent =
-    `${TIERS[G.tier].name} ข้อ ${G.num} · ใช้ตัวช่วย ${G.hints} ครั้ง · ลงผิด ${G.mistakes} ครั้ง` +
+    `${G.daily ? 'โจทย์ประจำวัน' : TIERS[G.tier].name + ' ข้อ ' + G.num}` +
+    ` · ตัวช่วย ${G.hints} ครั้ง · ลงผิด ${G.mistakes} ครั้ง` +
     (prev && !isBest ? ` · สถิติเดิม ${fmt(prev)}` : '');
 
   let tag = '';
   if(openedAfter > openedBefore) tag = `เปิดระดับ ${TIERS[openedAfter].name} แล้ว`;
   else if(isBest && prev) tag = 'ทำสถิติใหม่ของข้อนี้';
-  else if(G.tier + 1 < 5 && !isOpen(G.tier + 1)){
+  else if(!G.daily && G.tier + 1 < 5 && !isOpen(G.tier + 1)){
     const left = UNLOCK - doneCount(G.tier);
     if(left > 0) tag = `อีก ${left} ข้อ จะเปิดระดับ ${TIERS[G.tier + 1].name}`;
   }
+  if(gained > 0){
+    $('wRw').innerHTML = won.map(t => '◆ ' + t).join('<br>') +
+      `<br><b>ได้ตัวช่วย +${gained}</b> · มีทั้งหมด ${save.items}/${MAX_ITEMS} ชิ้น`;
+  }else if(G.firstClear){
+    $('wRw').innerHTML = won.length
+      ? won.map(t => '◆ ' + t).join('<br>') + `<br>ตัวช่วยเต็ม ${MAX_ITEMS} ชิ้นแล้ว`
+      : `ไม่ได้ภารกิจข้อไหน · มีตัวช่วย ${save.items} ชิ้น`;
+  }else{
+    $('wRw').innerHTML = `เคยผ่านข้อนี้แล้ว ภารกิจให้รางวัลเฉพาะครั้งแรก`;
+  }
+  $('wRw').classList.remove('hide');
   $('wTag').textContent = tag;
   $('wTag').classList.toggle('hide', !tag);
-  $('bNextP').classList.toggle('hide', G.num >= PER_TIER);
+  $('bNextP').classList.toggle('hide', !!G.daily || G.num >= PER_TIER);
   setTimeout(() => veil('vWin', true), 240);
 }
 
-/* ---------- นาฬิกา ---------- */
-let last = performance.now();
+/* ==================================================================
+   20. นาฬิกา
+   ================================================================== */
+let last = performance.now(), lastSec = -1;
 function tickClock(now){
   const dt = now - last; last = now;
   if(G && G.running && !G.done){
     G.elapsed += dt;
-    $('time').textContent = fmt(G.elapsed);
+    const sec = Math.floor(G.elapsed / 1000);
+    if(sec !== lastSec){ lastSec = sec; $('time').textContent = fmt(G.elapsed); updateChal(); }
   }
   requestAnimationFrame(tickClock);
 }
 function pauseGame(){
   if(!G || G.done) return;
   G.running = false;
-  keepAwake(false);
+  keepAwake(false); stashWip(true);
   $('pTime').textContent = fmt(G.elapsed);
   $('boardWrap').style.visibility = 'hidden';
   veil('vPause', true);
 }
 function resumeGame(){
   if(!G) return;
-  G.running = true;
-  keepAwake(true);
+  G.running = true; keepAwake(true);
   $('boardWrap').style.visibility = '';
   veil('vPause', false);
 }
+function leaveGame(){
+  stashWip(true);
+  G = null; keepAwake(false);
+  $('boardWrap').style.visibility = '';
+  drawHome(); view('home');
+}
 
-/* ---------- ปุ่มต่างๆ ---------- */
+/* ==================================================================
+   21. ปุ่ม
+   ================================================================== */
 const pad = $('pad');
 for(let d = 1; d <= 9; d++){
   const b = document.createElement('button');
@@ -966,31 +1353,75 @@ for(let d = 1; d <= 9; d++){
   b.onclick = () => setNum(d);
   pad.appendChild(b);
 }
-$('tUndo').onclick  = undo;
+$('tUndo').onclick = undo;
+$('tRedo').onclick = redo;
 $('tErase').onclick = erase;
-$('tNote').onclick  = () => { if(G){ G.noteMode = !G.noteMode; render(); } };
-$('tHint').onclick  = hint;
+$('tNote').onclick = () => { if(G){ G.noteMode = !G.noteMode; render(); } };
+$('tFill').onclick = autoNotes;
+$('tHint').onclick = hint;
 $('pauseB').onclick = pauseGame;
 $('bResume').onclick = resumeGame;
-$('bQuit').onclick   = () => { veil('vPause', false); $('boardWrap').style.visibility = ''; G = null; openPick(tierIdx); };
-$('gameBack').onclick = () => { G = null; openPick(tierIdx); };
+$('bQuit').onclick = () => { veil('vPause', false); leaveGame(); };
+$('gameBack').onclick = leaveGame;
+$('bRetry').onclick = () => { veil('vLose', false); const t = G.tier, n = G.num, d = G.daily; startGame(t, n, {daily: d}); };
+$('bLoseOut').onclick = () => { veil('vLose', false); leaveGame(); };
+$('bNextP').onclick = () => { veil('vWin', false); startGame(G.tier, Math.min(PER_TIER, G.num + 1)); };
+$('bBackList').onclick = () => { veil('vWin', false); const t = G.tier, d = G.daily; G = null; if(d){ drawHome(); view('home'); } else openPick(t); };
 $('pickBack').onclick = () => { drawHome(); view('home'); };
-$('bWipe').onclick = async () => {
-  const all = TIERS.reduce((sum, _, i) => sum + doneCount(i), 0);
-  if(!all){ alert('ยังไม่มีสถิติให้ล้าง'); return; }
-  if(!confirm(`ล้างสถิติทั้งหมด ${all} ข้อ?\n\nระดับที่ปลดล็อกไว้จะกลับไปเริ่มที่มือใหม่ใหม่ทั้งหมด และย้อนกลับไม่ได้`)) return;
-  save.best = {}; save.hintsTotal = 0;
-  try{ await window.storage.delete(KEY); }catch(e){}
-  try{ window.localStorage.removeItem(KEY); }catch(e){}
-  await storage.put();
-  drawHome();
-};
 $('pgPrev').onclick = () => { page--; drawNums(); };
 $('pgNext').onclick = () => { page++; drawNums(); };
 $('bContinue').onclick = () => startGame(tierIdx, firstUnsolved());
-$('bRandom').onclick   = () => startGame(tierIdx, 1 + ((Math.random() * PER_TIER) | 0));
-$('bNextP').onclick    = () => { veil('vWin', false); startGame(G.tier, Math.min(PER_TIER, G.num + 1)); };
-$('bBackList').onclick = () => { veil('vWin', false); const t = G.tier; G = null; openPick(t); };
+
+$('bStats').onclick = () => { drawStats(); view('stats'); };
+$('statsBack').onclick = () => { drawHome(); view('home'); };
+$('bSet').onclick = () => { drawSet(); view('set'); };
+$('setBack').onclick = () => { drawHome(); view('home'); };
+
+$('bResumeCard').onclick = () => {
+  const w = save.wip;
+  if(!w) return;
+  startGame(w.t, w.n, {daily: w.daily, restore: w});
+};
+$('bDailyCard').onclick = () => {
+  const d = dailyInfo();
+  startGame(d.tier, d.num, {daily: d.key});
+};
+
+/* ---------- ตั้งค่า ---------- */
+function drawSet(){
+  [['swNight','night'],['swSound','sound'],['swCheck','check'],['swStrict','strict']]
+    .forEach(([id, k]) => $(id).querySelector('.sw').classList.toggle('on', !!save[k]));
+}
+function toggle(id, k, after){
+  $(id).onclick = () => {
+    save[k] = save[k] ? 0 : 1;
+    drawSet(); storage.put();
+    if(after) after();
+  };
+}
+toggle('swNight', 'night', applyNight);
+toggle('swSound', 'sound', () => { if(save.sound) sfx.place(); });
+toggle('swCheck', 'check', () => {
+  if(!save.check && save.strict){ save.strict = 0; drawSet(); }   // ปิดตรวจ = จำกัดพลาดไม่ได้
+  if(G) $('lives').classList.toggle('hide', !save.strict);
+  render();
+});
+toggle('swStrict', 'strict', () => {
+  if(save.strict && !save.check){ save.check = 1; drawSet(); }     // จำกัดพลาดต้องเปิดตรวจ
+  if(G) $('lives').classList.toggle('hide', !save.strict);
+  render();
+});
+$('bWipe').onclick = async () => {
+  const all = Object.keys(save.best).length;
+  if(!all && !Object.keys(save.daily).length){ alert('ยังไม่มีสถิติให้ล้าง'); return; }
+  if(!confirm(`ล้างสถิติทั้งหมด ${all} ข้อ?\n\nระดับที่ปลดล็อกไว้จะกลับไปเริ่มใหม่ และย้อนกลับไม่ได้`)) return;
+  save.best = {}; save.daily = {}; save.days = []; save.hintsTotal = 0; save.wip = null;
+  save.items = START_ITEMS;
+  try{ await window.storage.delete(KEY); }catch(e){}
+  try{ window.localStorage.removeItem(KEY); }catch(e){}
+  await storage.put();
+  drawHome(); view('home');
+};
 
 /* ---------- คีย์บอร์ด ---------- */
 window.addEventListener('keydown', e => {
@@ -998,9 +1429,11 @@ window.addEventListener('keydown', e => {
   if(e.key >= '1' && e.key <= '9'){ setNum(+e.key); e.preventDefault(); return; }
   if(e.key === 'Backspace' || e.key === 'Delete' || e.key === '0'){ erase(); e.preventDefault(); return; }
   if(e.key === 'n' || e.key === 'N'){ G.noteMode = !G.noteMode; render(); return; }
+  if(e.key === 'f' || e.key === 'F'){ autoNotes(); return; }
   if(e.key === 'h' || e.key === 'H'){ hint(); return; }
   if(e.key === 'Escape'){ G.running ? pauseGame() : resumeGame(); return; }
-  if((e.ctrlKey || e.metaKey) && e.key === 'z'){ undo(); e.preventDefault(); return; }
+  if((e.ctrlKey || e.metaKey) && e.key === 'z'){ e.shiftKey ? redo() : undo(); e.preventDefault(); return; }
+  if((e.ctrlKey || e.metaKey) && e.key === 'y'){ redo(); e.preventDefault(); return; }
   const step = {ArrowUp: -9, ArrowDown: 9, ArrowLeft: -1, ArrowRight: 1}[e.key];
   if(step !== undefined){
     e.preventDefault();
@@ -1012,25 +1445,29 @@ window.addEventListener('keydown', e => {
   }
 });
 
-/* ---------- สลับออกจากแอป ให้พักเกมเอง เวลาจะได้ไม่เดินทิ้ง ---------- */
+/* ---------- สลับออกจากแอป ---------- */
 document.addEventListener('visibilitychange', () => {
   if(document.visibilityState === 'hidden'){
     if(G && G.running && !G.done) pauseGame();
-  }else if(G && G.running && !G.done){
-    keepAwake(true);
-  }
+  }else if(G && G.running && !G.done) keepAwake(true);
 });
 window.addEventListener('pagehide', () => { if(G && G.running) pauseGame(); });
 
-/* ---------- ทำให้เล่นออฟไลน์ได้ ---------- */
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  });
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 
 /* ---------- เริ่มทำงาน ---------- */
 storage.load().then(() => {
+  /* กันตัน: ข้อถูกล็อกเป็นลำดับ ถ้าไอเทมหมดแล้วติดอยู่จะไปต่อไม่ได้
+     เปิดแอปวันใหม่จึงเติมให้ถึง 2 ชิ้นเสมอ */
+  const today = dayKey();
+  if(save.topUp !== today){
+    save.topUp = today;
+    if(save.items < 2) save.items = 2;
+    storage.put();
+  }
+  applyNight();
   drawHome();
   view('home');
   requestAnimationFrame(tickClock);
