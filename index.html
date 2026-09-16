@@ -12,21 +12,47 @@
 <meta name="apple-mobile-web-app-title" content="ซูโดกุ">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" href="icons/icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+/* ฟอนต์เก็บไว้ในเครื่อง ไม่ต้องต่อเน็ต เปิดครั้งแรกออฟไลน์ก็ได้หน้าตาเหมือนกัน
+   แบ่ง subset ตาม unicode-range เบราว์เซอร์จะโหลดเฉพาะชุดที่ใช้จริง */
+@font-face{font-family:'IBM Plex Sans Thai';font-style:normal;font-weight:300;font-display:swap;
+  src:url(fonts/ibm-plex-sans-thai-thai-300-normal.woff2) format('woff2');
+  unicode-range:U+02D7,U+0303,U+0331,U+0E01-0E5B,U+200C-200D,U+25CC}
+@font-face{font-family:'IBM Plex Sans Thai';font-style:normal;font-weight:300;font-display:swap;
+  src:url(fonts/ibm-plex-sans-thai-latin-300-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Sans Thai';font-style:normal;font-weight:400;font-display:swap;
+  src:url(fonts/ibm-plex-sans-thai-thai-400-normal.woff2) format('woff2');
+  unicode-range:U+02D7,U+0303,U+0331,U+0E01-0E5B,U+200C-200D,U+25CC}
+@font-face{font-family:'IBM Plex Sans Thai';font-style:normal;font-weight:400;font-display:swap;
+  src:url(fonts/ibm-plex-sans-thai-latin-400-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Sans Thai';font-style:normal;font-weight:500;font-display:swap;
+  src:url(fonts/ibm-plex-sans-thai-thai-500-normal.woff2) format('woff2');
+  unicode-range:U+02D7,U+0303,U+0331,U+0E01-0E5B,U+200C-200D,U+25CC}
+@font-face{font-family:'IBM Plex Sans Thai';font-style:normal;font-weight:500;font-display:swap;
+  src:url(fonts/ibm-plex-sans-thai-latin-500-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:swap;
+  src:url(fonts/ibm-plex-mono-latin-400-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;
+  src:url(fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
 :root{
-  --bg:#f2f7fc; --white:#ffffff; --ink:#16212f; --soft:#78899d;
+  --bg:#f2f7fc; --white:#ffffff; --ink:#16212f; --soft:#647488;
   --hair:#d3e2ef; --rule:#7ba3c8; --edge:#e2ecf6; --tint:#eaf3fb;
   --peer:#f0f7fd; --twin:#d7e9f8; --sel:#b9dcf7;
-  --blue:#2e7fc4; --bad:#c9556c; --bad-bg:#fbeaed;
+  --blue:#2b77bb; --bad:#bf4a61; --bad-bg:#fbeaed;
+  --good:#2a8152; --missed:#a95c71; --future:#c3ccd6;
 }
 [data-night="1"]{
   --bg:#0f1621; --white:#18202c; --ink:#e6eef7; --soft:#8296ab;
   --hair:#26313f; --rule:#456079; --edge:#222c39; --tint:#1d2836;
   --peer:#1b2532; --twin:#254257; --sel:#2f5b80;
   --blue:#5aa9e6; --bad:#e0748a; --bad-bg:#3a2029;
+  --good:#3f9e6c; --missed:#d08296; --future:#3a4554;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{height:100%;overscroll-behavior:none}
@@ -124,6 +150,7 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .btn{flex:1;padding:12px;border-radius:11px;font-size:14px;background:var(--blue);color:#fff}
 .btn.alt{background:var(--tint);color:var(--ink)}
 .btn:active{transform:scale(.98)}
+.btn:disabled{background:var(--tint);color:var(--soft);cursor:default;transform:none}
 
 /* ── กระดาน ── */
 .clock{display:flex;align-items:center;gap:8px;flex:none}
@@ -188,6 +215,30 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
 .bdg{position:absolute;top:4px;right:8px;font-family:'IBM Plex Mono',monospace;
   font-size:10.5px;font-weight:500;color:var(--blue);line-height:1;font-style:normal}
 .tool:disabled .bdg{color:var(--soft)}
+
+/* ── เช็คอิน ── */
+.calhead{display:flex;align-items:center;justify-content:space-between;padding:2px 4px 10px;flex:none}
+.calhead h2{font-size:15px;font-weight:500}
+.caldow{display:grid;grid-template-columns:repeat(7, minmax(0,1fr));gap:5px;margin-bottom:6px}
+.caldow span{text-align:center;font-size:10.5px;font-weight:300;color:var(--soft)}
+.calgrid{display:grid;grid-template-columns:repeat(7, minmax(0,1fr));gap:5px}
+.day{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;position:relative;
+  font-family:'IBM Plex Mono',monospace;font-size:13px;font-variant-numeric:tabular-nums;
+  background:var(--tint);color:var(--ink)}
+.day.blank{background:transparent}
+.day.ok{background:var(--good);color:#fff;font-weight:500}
+.day.miss{background:transparent;border:1px dashed var(--missed);color:var(--missed)}
+.day.future{background:transparent;color:var(--future)}
+.day.today{box-shadow:inset 0 0 0 2px var(--blue);color:var(--blue);font-weight:500;background:var(--white)}
+.day.today.ok{box-shadow:inset 0 0 0 2px var(--blue);color:#fff;background:var(--good)}
+.legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:14px;font-size:11px;
+  font-weight:300;color:var(--soft)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.streakbig{display:flex;align-items:center;justify-content:center;gap:9px;padding:4px 0 2px}
+.streakbig b{font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:500;line-height:1}
+.streakbig span{font-size:12.5px;font-weight:300;color:var(--soft)}
+.flame{font-size:28px;line-height:1}
+
 
 /* ── สถิติ ── */
 .statgrid{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:8px;flex:none}
@@ -264,6 +315,12 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
     <span class="b-go">›</span>
   </button>
 
+  <button class="banner" id="bCheckCard">
+    <span class="dot" id="ccDot">🔥</span>
+    <span><span class="b-name" id="ccName">เช็คอินวันนี้</span><span class="b-sub" id="ccSub"></span></span>
+    <span class="b-go">›</span>
+  </button>
+
   <button class="banner" id="bDailyCard">
     <span class="dot"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
     <span><span class="b-name" id="dcName">โจทย์ประจำวัน</span><span class="b-sub" id="dcSub"></span></span>
@@ -299,6 +356,41 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
   <p class="note" id="pickNote"></p>
 </section>
 
+<!-- ═══════ เช็คอิน ═══════ -->
+<section id="vCheck" class="hide">
+  <div class="topbar">
+    <div class="topleft">
+      <button class="back" id="checkBack" aria-label="ย้อนกลับ">‹</button>
+      <div><div class="top-h">เช็คอินรายวัน</div><div class="top-s" id="checkSub"></div></div>
+    </div>
+  </div>
+
+  <div class="card" style="padding:14px 15px">
+    <div class="streakbig">
+      <span class="flame" id="ckFlame">🌱</span>
+      <b id="ckStreak">0</b>
+      <span>วันติดกัน</span>
+    </div>
+    <button class="btn" id="bDoCheck" style="width:100%;margin-top:10px">เช็คอินรับตัวช่วย</button>
+  </div>
+
+  <div class="card" style="padding:14px 15px">
+    <div class="calhead">
+      <button class="back" id="calPrev" aria-label="เดือนก่อน">‹</button>
+      <h2 id="calTitle">กันยายน 2569</h2>
+      <button class="back" id="calNext" aria-label="เดือนถัดไป">›</button>
+    </div>
+    <div class="caldow"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>
+    <div class="calgrid" id="calGrid"></div>
+    <div class="legend">
+      <span><i style="background:var(--good)"></i>เช็คอินแล้ว</span>
+      <span><i style="border:1px dashed var(--missed)"></i>พลาด</span>
+      <span><i style="background:var(--tint)"></i>ยังไม่ถึง</span>
+    </div>
+  </div>
+  <p class="note" id="checkNote"></p>
+</section>
+
 <!-- ═══════ สถิติ ═══════ -->
 <section id="vStats" class="hide">
   <div class="topbar">
@@ -327,9 +419,11 @@ button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer
     <button class="srow" id="swStrict"><span><b>โหมดเข้มงวด</b><span>ลงผิดเกินเป้าภารกิจของระดับนั้นถือว่าแพ้ ต้องเริ่มข้อใหม่</span></span><span class="sw"></span></button>
   </div>
   <div class="card">
-    <button class="srow" id="bWipe"><span><b class="danger">ล้างสถิติทั้งหมด</b><span>ความคืบหน้าและการปลดล็อกจะกลับไปเริ่มใหม่</span></span><span>›</span></button>
+    <button class="srow" id="bExport"><span><b>บันทึกข้อมูลสำรอง</b><span>ดาวน์โหลดเป็นไฟล์ เก็บไว้กันข้อมูลหายตอนเปลี่ยนเครื่อง</span></span><span>›</span></button>
+    <button class="srow" id="bImport"><span><b>กู้คืนจากไฟล์สำรอง</b><span>ความคืบหน้าปัจจุบันจะถูกแทนที่ด้วยข้อมูลในไฟล์</span></span><span>›</span></button>
   </div>
-  <p class="note">ข้อมูลทั้งหมดเก็บอยู่ในเครื่องนี้เท่านั้น ไม่ได้ส่งไปที่ไหน</p>
+  <input type="file" id="fileIn" accept="application/json,.json" style="display:none">
+  <p class="note" id="setNote"></p>
 </section>
 
 <!-- ═══════ เกม ═══════ -->
@@ -708,32 +802,56 @@ const TECH = ['เห็นช่องเดียวตรงๆ' ,'เลข�
 /* ==================================================================
    8. ข้อมูลที่บันทึก
    ================================================================== */
+const APP_VERSION = '1.1.0';
 const KEY = 'sudoku1000v3';
+const WIP_KEY = 'sudoku1000wip';   /* แยกคีย์ เพราะเขียนบ่อยมากระหว่างเล่น
+                                      ถ้าเก็บรวมก้อนเดียวจะต้องเขียน 33KB ทุกครั้งที่ลงเลข */
 const save = {
   best: {},            // 'medium:17' → เวลาที่ดีที่สุด (ms)
   daily: {},           // '2026-09-13' → เวลาที่ทำได้
   days: [],            // วันที่ที่เล่นจบอย่างน้อยหนึ่งข้อ
   hintsTotal: 0, items: START_ITEMS, topUp: null,
-  wip: null,           // เกมที่เล่นค้างไว้
+  checkins: [],        // วันที่กดเช็คอินแล้ว
+  since: null,         // วันแรกที่เปิดแอป ก่อนหน้านี้ไม่นับว่าพลาด
   night: 0, sound: 1, check: 1, strict: 0
 };
+let wip = null;        // เกมที่เล่นค้าง เก็บแยกคีย์
 const storage = {
-  async load(){
+  async read(k){
     try{
-      const r = await window.storage.get(KEY);
-      if(r && r.value){ Object.assign(save, JSON.parse(r.value)); return; }
+      const r = await window.storage.get(k);
+      if(r && r.value) return JSON.parse(r.value);
     }catch(e){}
     try{
-      const raw = window.localStorage.getItem(KEY);
-      if(raw) Object.assign(save, JSON.parse(raw));
+      const raw = window.localStorage.getItem(k);
+      if(raw) return JSON.parse(raw);
     }catch(e){}
+    return null;
   },
-  async put(){
-    const json = JSON.stringify(save);
+  async write(k, obj){
+    const json = JSON.stringify(obj);
     let ok = false;
-    try{ await window.storage.set(KEY, json); ok = true; }catch(e){}
-    if(!ok){ try{ window.localStorage.setItem(KEY, json); }catch(e){} }
-  }
+    try{ await window.storage.set(k, json); ok = true; }catch(e){}
+    if(!ok){ try{ window.localStorage.setItem(k, json); }catch(e){} }
+  },
+  async drop(k){
+    try{ await window.storage.delete(k); }catch(e){}
+    try{ window.localStorage.removeItem(k); }catch(e){}
+  },
+  async load(){
+    const main = await storage.read(KEY);
+    if(main){
+      Object.assign(save, main);
+      /* ของเวอร์ชันเก่าเก็บเกมค้างปนอยู่ในก้อนหลัก ย้ายออกมา */
+      if(main.wip){ wip = main.wip; delete save.wip; await storage.write(WIP_KEY, wip); }
+      /* เวอร์ชันเก่านับวันที่เล่นจบเป็นสตรีค ใช้เป็นจุดตั้งต้นของเช็คอิน */
+      if((!save.checkins || !save.checkins.length) && main.days) save.checkins = main.days.slice();
+      delete save.days;
+    }
+    if(!wip) wip = await storage.read(WIP_KEY);
+  },
+  put(){ return storage.write(KEY, save); },
+  putWip(){ return storage.write(WIP_KEY, wip); }
 };
 const bestKey = (t, n) => TIERS[t].key + ':' + n;
 const doneCount = t => Object.keys(save.best).filter(k => k.startsWith(TIERS[t].key + ':')).length;
@@ -795,7 +913,8 @@ function dailyInfo(key){
    11. หน้าจอ
    ================================================================== */
 const $ = id => document.getElementById(id);
-const views = {home: $('vHome'), pick: $('vPick'), game: $('vGame'), stats: $('vStats'), set: $('vSet')};
+const views = {home: $('vHome'), pick: $('vPick'), game: $('vGame'), stats: $('vStats'),
+               set: $('vSet'), check: $('vCheck')};
 function view(name){ for(const k in views) views[k].classList.toggle('hide', k !== name); }
 function veil(id, on){ $(id).classList.toggle('hide', !on); }
 const buzz = p => { try{ navigator.vibrate && navigator.vibrate(p); }catch(e){} };
@@ -828,7 +947,7 @@ function applyNight(){
    ================================================================== */
 function drawHome(){
   // การ์ดเล่นต่อ
-  const w = save.wip;
+  const w = wip;
   $('bResumeCard').classList.toggle('hide', !w);
   if(w){
     const label = w.daily ? 'โจทย์ประจำวัน' : `${TIERS[w.t].name} ข้อ ${w.n}`;
@@ -836,6 +955,15 @@ function drawHome(){
     $('rcName').textContent = 'เล่นต่อ · ' + label;
     $('rcSub').textContent = `เติมไปแล้ว ${filled} จาก 81 ช่อง · ${fmt(w.ms)}`;
   }
+
+  // การ์ดเช็คอิน
+  const st = streak(), ckDone = checkedToday();
+  $('ccDot').textContent = st.cur > 0 ? '🔥' : '🌱';
+  $('ccName').textContent = ckDone ? `เช็คอินแล้ว · ต่อเนื่อง ${st.cur} วัน` : 'เช็คอินวันนี้';
+  $('ccSub').textContent = ckDone
+    ? `ตัวช่วย ${save.items}/${MAX_ITEMS} · แตะดูปฏิทินทั้งเดือน`
+    : 'รับตัวช่วยฟรี วันละครั้ง';
+  $('bCheckCard').classList.toggle('accent', !ckDone);
 
   // การ์ดโจทย์ประจำวัน
   const d = dailyInfo();
@@ -869,8 +997,86 @@ function drawHome(){
 
   const all = TIERS.reduce((s, _, i) => s + doneCount(i), 0);
   $('homeNote').textContent = all
-    ? `ผ่านแล้ว ${all} จาก 1000 ข้อ · เล่นติดกัน ${streak().cur} วัน · ตัวช่วย ${save.items} ชิ้น`
-    : `ทุกข้อมีคำตอบเดียวเสมอ · ผ่าน ${UNLOCK} ข้อในระดับหนึ่ง เพื่อเปิดระดับถัดไป`;
+    ? `ผ่านแล้ว ${all} จาก 1000 ข้อ · ตัวช่วย ${save.items}/${MAX_ITEMS} ชิ้น · เวอร์ชัน ${APP_VERSION}`
+    : `ทุกข้อมีคำตอบเดียวเสมอ · ผ่าน ${UNLOCK} ข้อในระดับหนึ่ง เพื่อเปิดระดับถัดไป · เวอร์ชัน ${APP_VERSION}`;
+}
+
+/* ==================================================================
+   12.5 เช็คอินรายวัน
+   กดได้วันละครั้ง ย้อนหลังไม่ได้ ได้ตัวช่วยสุ่ม 1-3 ชิ้น
+   ครบทุก 7 วันติดกันได้โบนัสเพิ่ม
+   ================================================================== */
+const CK_MIN = 1, CK_MAX = 3, CK_WEEK_BONUS = 2;
+const TH_MONTH = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
+                  'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+let calView = null;
+
+const checkedToday = () => (save.checkins || []).includes(dayKey());
+
+function doCheckin(){
+  if(checkedToday()) return;
+  save.checkins = save.checkins || [];
+  save.checkins.push(dayKey());
+  if(save.checkins.length > 500) save.checkins = save.checkins.slice(-500);
+
+  const st = streak();
+  let gain = CK_MIN + Math.floor(Math.random() * (CK_MAX - CK_MIN + 1));
+  const weekly = st.cur > 0 && st.cur % 7 === 0;
+  if(weekly) gain += CK_WEEK_BONUS;
+
+  const before = save.items;
+  save.items = Math.min(MAX_ITEMS, save.items + gain);
+  const got = save.items - before;
+  storage.put();
+  sfx.win(); buzz([30, 50, 30]);
+
+  drawCheck();
+  $('checkNote').textContent = got > 0
+    ? `ได้ตัวช่วย +${got} ชิ้น` + (weekly ? ` (รวมโบนัสครบ ${st.cur} วัน +${CK_WEEK_BONUS})` : '') +
+      ` · มีทั้งหมด ${save.items}/${MAX_ITEMS}`
+    : `ตัวช่วยเต็ม ${MAX_ITEMS} ชิ้นแล้ว เก็บไว้ใช้ก่อนค่อยมาเช็คอินใหม่`;
+}
+
+function drawCheck(){
+  const st = streak(), done = checkedToday();
+  $('ckStreak').textContent = st.cur;
+  $('ckFlame').textContent = st.cur > 0 ? '🔥' : '🌱';
+  $('bDoCheck').disabled = done;
+  $('bDoCheck').textContent = done ? 'เช็คอินวันนี้แล้ว' : 'เช็คอินรับตัวช่วย';
+  $('checkSub').textContent = `รวม ${(save.checkins || []).length} วัน · สูงสุด ${st.best} วันติดกัน`;
+  if(!done) $('checkNote').textContent = 'เช็คอินได้วันละครั้ง ย้อนหลังไม่ได้';
+  drawCal();
+}
+
+function drawCal(){
+  const now = new Date();
+  if(!calView) calView = {y: now.getFullYear(), m: now.getMonth()};
+  const {y, m} = calView;
+  $('calTitle').textContent = `${TH_MONTH[m]} ${y + 543}`;
+  const lead = new Date(y, m, 1).getDay();
+  const total = new Date(y, m + 1, 0).getDate();
+  const set = new Set(save.checkins || []);
+  const today = dayKey();
+  let html = '';
+  for(let i = 0; i < lead; i++) html += '<div class="day blank"></div>';
+  for(let d = 1; d <= total; d++){
+    const k = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    let cls = 'day';
+    if(set.has(k)) cls += ' ok';
+    else if(k < today) cls += (save.since && k < save.since) ? ' future' : ' miss';
+    else if(k > today) cls += ' future';
+    if(k === today) cls += ' today';
+    html += `<div class="${cls}">${d}</div>`;
+  }
+  $('calGrid').innerHTML = html;
+  $('calNext').disabled = (y === now.getFullYear() && m === now.getMonth());
+}
+function shiftMonth(step){
+  const now = new Date();
+  const d = new Date(calView.y, calView.m + step, 1);
+  if(d > now && !(d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth())) return;
+  calView = {y: d.getFullYear(), m: d.getMonth()};
+  drawCal();
 }
 
 /* ==================================================================
@@ -922,7 +1128,7 @@ function firstUnsolved(){
    14. สถิติ
    ================================================================== */
 function streak(){
-  const set = new Set(save.days || []);
+  const set = new Set(save.checkins || []);
   let cur = 0;
   const d = new Date();
   if(!set.has(dayKey(d))) d.setDate(d.getDate() - 1);   // ยังไม่เล่นวันนี้ก็นับจากเมื่อวาน
@@ -941,7 +1147,7 @@ function drawStats(){
   $('statsSub').textContent = `ผ่านแล้ว ${total} จาก 1000 ข้อ`;
   $('statTop').innerHTML = `
     <div class="stat"><b>${total}</b><span>ข้อที่ผ่าน</span></div>
-    <div class="stat"><b>${st.cur}</b><span>เล่นติดกัน (วัน)</span></div>
+    <div class="stat"><b>${st.cur > 0 ? '🔥' : '🌱'} ${st.cur}</b><span>เช็คอินต่อเนื่อง (วัน)</span></div>
     <div class="stat"><b>${save.items}</b><span>ตัวช่วยที่มี</span></div>`;
 
   let html = `<div class="trow hdr"><span>ระดับ</span><em>ผ่าน</em><em>เร็วสุด</em><em>เฉลี่ย</em></div>`;
@@ -954,7 +1160,8 @@ function drawStats(){
   });
   const dn = Object.keys(save.daily || {}).length;
   html += `<div class="trow plain"><span>โจทย์ประจำวันที่ทำแล้ว</span><em>${dn} ข้อ</em></div>`;
-  html += `<div class="trow plain"><span>เล่นติดกันสูงสุด</span><em>${st.best} วัน</em></div>`;
+  html += `<div class="trow plain"><span>เช็คอินต่อเนื่องสูงสุด</span><em>🔥 ${st.best} วัน</em></div>`;
+  html += `<div class="trow plain"><span>เช็คอินรวม</span><em>${(save.checkins||[]).length} วัน</em></div>`;
   html += `<div class="trow plain"><span>ใช้ตัวช่วยรวม</span><em>${save.hintsTotal} ครั้ง</em></div>`;
   $('statTable').innerHTML = html;
 }
@@ -964,6 +1171,12 @@ function drawStats(){
    ================================================================== */
 function startGame(t, n, opts){
   opts = opts || {};
+  /* มีเกมค้างของข้ออื่นอยู่ ถามก่อนทับ ไม่งั้นความคืบหน้าหายเงียบๆ */
+  if(!opts.restore && wip && !(wip.t === t && wip.n === n && wip.daily === (opts.daily || null))){
+    const label = wip.daily ? 'โจทย์ประจำวัน' : `${TIERS[wip.t].name} ข้อ ${wip.n}`;
+    if(!confirm(`ยังมี ${label} เล่นค้างไว้ที่ ${fmt(wip.ms)}\n\nเริ่มข้อใหม่จะทำให้ของเดิมหายไป ยืนยันไหม`)) return;
+    clearWip();
+  }
   tierIdx = t;
   veil('vLoad', true);
   $('loadMsg').textContent = opts.daily ? 'กำลังสร้างโจทย์ประจำวัน'
@@ -1007,20 +1220,20 @@ function stashWip(now){
   if(!G || G.done) return;
   const doIt = () => {
     if(!G || G.done) return;
-    save.wip = {
+    wip = {
       t: G.tier, n: G.num, daily: G.daily,
       b: Array.from(G.board).join(''),
       nt: Array.from(G.notes).join(','),
       ms: Math.round(G.elapsed), h: G.hints, m: G.mistakes
     };
-    storage.put();
+    storage.putWip();                 /* ~350 bytes แทน 33KB */
   };
   clearTimeout(wipTimer);
   if(now) doIt(); else wipTimer = setTimeout(doIt, 700);
 }
 function clearWip(){
   clearTimeout(wipTimer);
-  if(save.wip){ save.wip = null; storage.put(); }
+  if(wip){ wip = null; storage.drop(WIP_KEY); }
 }
 
 /* ==================================================================
@@ -1218,14 +1431,6 @@ function hint(){
 /* ==================================================================
    19. จบเกม
    ================================================================== */
-function markDay(){
-  const k = dayKey();
-  save.days = save.days || [];
-  if(!save.days.includes(k)){
-    save.days.push(k);
-    if(save.days.length > 400) save.days = save.days.slice(-400);
-  }
-}
 function loseGame(){
   G.done = true; G.running = false;
   keepAwake(false); sfx.lose(); buzz([60, 80, 60]);
@@ -1273,7 +1478,6 @@ function checkWin(){
     save.items = Math.min(MAX_ITEMS, save.items + gained);
     gained = save.items - before;              /* ชนเพดานแล้วไม่บวกเกิน */
   }
-  markDay();
   storage.put();
   const openedAfter = topOpen();
 
@@ -1372,13 +1576,18 @@ $('pgPrev').onclick = () => { page--; drawNums(); };
 $('pgNext').onclick = () => { page++; drawNums(); };
 $('bContinue').onclick = () => startGame(tierIdx, firstUnsolved());
 
+$('bCheckCard').onclick = () => { calView = null; drawCheck(); view('check'); };
+$('checkBack').onclick = () => { drawHome(); view('home'); };
+$('bDoCheck').onclick = doCheckin;
+$('calPrev').onclick = () => shiftMonth(-1);
+$('calNext').onclick = () => shiftMonth(1);
 $('bStats').onclick = () => { drawStats(); view('stats'); };
 $('statsBack').onclick = () => { drawHome(); view('home'); };
 $('bSet').onclick = () => { drawSet(); view('set'); };
 $('setBack').onclick = () => { drawHome(); view('home'); };
 
 $('bResumeCard').onclick = () => {
-  const w = save.wip;
+  const w = wip;
   if(!w) return;
   startGame(w.t, w.n, {daily: w.daily, restore: w});
 };
@@ -1391,6 +1600,8 @@ $('bDailyCard').onclick = () => {
 function drawSet(){
   [['swNight','night'],['swSound','sound'],['swCheck','check'],['swStrict','strict']]
     .forEach(([id, k]) => $(id).querySelector('.sw').classList.toggle('on', !!save[k]));
+  $('setNote').textContent =
+    `ซูโดกุ 1000 แบบฝึก เวอร์ชัน ${APP_VERSION} · ข้อมูลทั้งหมดเก็บอยู่ในเครื่องนี้เท่านั้น`;
 }
 function toggle(id, k, after){
   $(id).onclick = () => {
@@ -1411,16 +1622,46 @@ toggle('swStrict', 'strict', () => {
   if(G) $('lives').classList.toggle('hide', !save.strict);
   render();
 });
-$('bWipe').onclick = async () => {
-  const all = Object.keys(save.best).length;
-  if(!all && !Object.keys(save.daily).length){ alert('ยังไม่มีสถิติให้ล้าง'); return; }
-  if(!confirm(`ล้างสถิติทั้งหมด ${all} ข้อ?\n\nระดับที่ปลดล็อกไว้จะกลับไปเริ่มใหม่ และย้อนกลับไม่ได้`)) return;
-  save.best = {}; save.daily = {}; save.days = []; save.hintsTotal = 0; save.wip = null;
-  save.items = START_ITEMS;
-  try{ await window.storage.delete(KEY); }catch(e){}
-  try{ window.localStorage.removeItem(KEY); }catch(e){}
-  await storage.put();
-  drawHome(); view('home');
+/* ---------- สำรองและกู้คืนข้อมูล ---------- */
+$('bExport').onclick = () => {
+  const payload = {app: 'sudoku1000', version: APP_VERSION, exportedAt: new Date().toISOString(), save, wip};
+  const blob = new Blob([JSON.stringify(payload)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `sudoku-backup-${dayKey()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
+  $('setNote').textContent = 'บันทึกไฟล์แล้ว เก็บไว้ในที่ปลอดภัย';
+};
+$('bImport').onclick = () => $('fileIn').click();
+$('fileIn').onchange = ev => {
+  const f = ev.target.files && ev.target.files[0];
+  ev.target.value = '';
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = async () => {
+    try{
+      const d = JSON.parse(reader.result);
+      if(!d || d.app !== 'sudoku1000' || !d.save || typeof d.save.best !== 'object')
+        throw new Error('ไม่ใช่ไฟล์สำรองของเกมนี้');
+      const cnt = Object.keys(d.save.best).length;
+      if(!confirm(`ไฟล์นี้มีความคืบหน้า ${cnt} ข้อ (บันทึกเมื่อ ${String(d.exportedAt).slice(0,10)})\n\n` +
+                  'กู้คืนแล้วข้อมูลปัจจุบันจะถูกแทนที่ทั้งหมด ยืนยันไหม')) return;
+      Object.keys(save).forEach(k => delete save[k]);
+      Object.assign(save, d.save);
+      wip = d.wip || null;
+      await storage.put();
+      if(wip) await storage.putWip(); else await storage.drop(WIP_KEY);
+      applyNight(); drawHome(); view('home');
+      alert(`กู้คืนสำเร็จ · ความคืบหน้า ${cnt} ข้อ`);
+    }catch(err){
+      alert('กู้คืนไม่สำเร็จ: ' + err.message);
+    }
+  };
+  reader.onerror = () => alert('อ่านไฟล์ไม่สำเร็จ');
+  reader.readAsText(f);
 };
 
 /* ---------- คีย์บอร์ด ---------- */
@@ -1462,11 +1703,12 @@ storage.load().then(() => {
   /* กันตัน: ข้อถูกล็อกเป็นลำดับ ถ้าไอเทมหมดแล้วติดอยู่จะไปต่อไม่ได้
      เปิดแอปวันใหม่จึงเติมให้ถึง 2 ชิ้นเสมอ */
   const today = dayKey();
+  if(!save.since) save.since = today;
   if(save.topUp !== today){
     save.topUp = today;
     if(save.items < 2) save.items = 2;
-    storage.put();
   }
+  storage.put();
   applyNight();
   drawHome();
   view('home');

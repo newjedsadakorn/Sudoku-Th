@@ -5,7 +5,7 @@
 
    เลื่อนเลข VERSION เมื่อแก้ไฟล์อื่นที่ไม่ใช่ index.html
    (ตัว index.html ไม่ต้องเลื่อนแล้ว เพราะดึงสดทุกครั้งที่ออนไลน์) */
-const VERSION = 'sudoku-v8';
+const VERSION = 'sudoku-v9';
 const DOC = './index.html';
 const FILES = [
   './',
@@ -14,7 +14,15 @@ const FILES = [
   './icons/icon-180.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './icons/icon-maskable-512.png'
+  './icons/icon-maskable-512.png',
+  './fonts/ibm-plex-mono-latin-400-normal.woff2',
+  './fonts/ibm-plex-mono-latin-500-normal.woff2',
+  './fonts/ibm-plex-sans-thai-latin-300-normal.woff2',
+  './fonts/ibm-plex-sans-thai-latin-400-normal.woff2',
+  './fonts/ibm-plex-sans-thai-latin-500-normal.woff2',
+  './fonts/ibm-plex-sans-thai-thai-300-normal.woff2',
+  './fonts/ibm-plex-sans-thai-thai-400-normal.woff2',
+  './fonts/ibm-plex-sans-thai-thai-500-normal.woff2'
 ];
 const TIMEOUT = 3500;
 
@@ -51,10 +59,6 @@ async function cacheFirst(req){
   if(hit) return hit;
   try{
     const res = await fetch(req);
-    if(res.ok && req.url.includes('fonts.g')){
-      const cache = await caches.open(VERSION);
-      cache.put(req, res.clone());
-    }
     return res;
   }catch(err){
     return (await caches.match(DOC)) || Response.error();
